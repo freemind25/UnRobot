@@ -84,6 +84,7 @@ export const useTextCleaner = () => {
   const humanizeText = useCallback((inputText: string, intensity: HumanizeIntensity): HumanizeResult => {
     let result = inputText;
     let modifications = 0;
+    const changeLog: ChangeLog[] = [];
 
     // Probability thresholds based on intensity
     const thresholds = {
@@ -114,7 +115,7 @@ export const useTextCleaner = () => {
       [/\bEn ce qui concerne/gi, ["Pour ce qui est de", "Côté", "Question", "Sur"]],
     ];
 
-    // 1b. English transition replacements (so it works on English text too)
+    // 1b. English transition replacements
     const englishTransitionReplacements: [RegExp, string[]][] = [
       [/\bFurthermore,/gi, ["On top of that,", "Plus,", "And also,", "Besides,"]],
       [/\bMoreover,/gi, ["What's more,", "On top of that,", "Also,", "Plus,"]],
@@ -144,7 +145,14 @@ export const useTextCleaner = () => {
       result = result.replace(pattern, (match) => {
         if (Math.random() > t.base) {
           modifications++;
-          return replacements[Math.floor(Math.random() * replacements.length)];
+          const replacement = replacements[Math.floor(Math.random() * replacements.length)];
+          changeLog.push({
+            type: "transition",
+            original: match,
+            replacement,
+            reason: "Les transitions mécaniques (« " + match + " ») sont un marqueur fort d'IA. On les remplace par des tournures plus naturelles.",
+          });
+          return replacement;
         }
         return match;
       });
@@ -153,13 +161,19 @@ export const useTextCleaner = () => {
     // 2. Varier la longueur des phrases (couper les longues)
     const sentences = result.split(/(?<=[.!?])\s+/);
     const modifiedSentences = sentences.map((sentence) => {
-      // Couper les phrases très longues (>150 caractères)
       if (sentence.length > 150 && Math.random() > t.medium) {
         const splitPoints = [", qui ", ", ce qui ", ", car ", ", et ", ", mais "];
         for (const point of splitPoints) {
           if (sentence.includes(point)) {
             modifications++;
-            return sentence.replace(point, ". " + point.trim().charAt(2).toUpperCase() + point.trim().slice(3));
+            const newSentence = sentence.replace(point, ". " + point.trim().charAt(2).toUpperCase() + point.trim().slice(3));
+            changeLog.push({
+              type: "sentence_split",
+              original: sentence.substring(0, Math.min(60, sentence.length)) + (sentence.length > 60 ? "..." : ""),
+              replacement: newSentence.substring(0, Math.min(60, newSentence.length)) + (newSentence.length > 60 ? "..." : ""),
+              reason: "Les phrases très longues (>150 caractères) créent un rythme monotone typique de l'IA. On les coupe pour recréer du burstiness.",
+            });
+            return newSentence;
           }
         }
       }
@@ -177,11 +191,16 @@ export const useTextCleaner = () => {
       let count = 0;
       result = result.replace(pattern, (match, letter) => {
         count++;
-        // N'insérer que très occasionnellement
         const freq = intensity === "aggressive" ? 4 : intensity === "moderate" ? 6 : 10;
         if (count % Math.floor(Math.random() * 4 + freq) === 0 && Math.random() > t.medium) {
           modifications++;
           const replacement = replacements[Math.floor(Math.random() * replacements.length)];
+          changeLog.push({
+            type: "interjection",
+            original: ". [Nouvelle phrase]",
+            replacement: replacement.replace("$1", letter),
+            reason: "Ajout d'interjections (« Bon », « Bref », etc.) pour rompre le rythme monotone et imiter la parole spontanée.",
+          });
           return replacement.replace("$1", letter);
         }
         return match;
@@ -234,28 +253,45 @@ export const useTextCleaner = () => {
         if (Math.random() > t.medium) {
           modifications++;
           const replacement = replacements[Math.floor(Math.random() * replacements.length)];
-          return match[0] === match[0].toUpperCase()
+          const capitalized = match[0] === match[0].toUpperCase()
             ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
             : replacement;
+          changeLog.push({
+            type: "formal_to_informal",
+            original: match,
+            replacement: capitalized,
+            reason: "Les mots trop formels (« " + match + " ») sont surutilisés par l'IA. On les remplace par des équivalents courants pour casser la perfection excessive.",
+          });
+          return capitalized;
         }
         return match;
       });
     });
 
     // 5. Varier la ponctuation
-    // Remplacer parfois les virgules par des tirets
     result = result.replace(/,/g, (match) => {
       if (Math.random() > t.rare) {
         modifications++;
+        changeLog.push({
+          type: "punctuation",
+          original: ",",
+          replacement: " –",
+          reason: "Varier la ponctuation (virgule → tiret) pour casser la régularité statistique des pauses.",
+        });
         return " –";
       }
       return match;
     });
 
-    // Ajouter des points de suspension pour simuler la réflexion
     result = result.replace(/\.\s+([A-Z])/g, (match, letter) => {
       if (Math.random() > t.rare) {
         modifications++;
+        changeLog.push({
+          type: "punctuation",
+          original: ". " + letter,
+          replacement: "... " + letter,
+          reason: "Les points de suspension simulent une réflexion en cours, typique de l'écriture humaine spontanée.",
+        });
         return `... ${letter}`;
       }
       return match;
@@ -274,6 +310,12 @@ export const useTextCleaner = () => {
         result = result.replace(pattern, (match) => {
           if (Math.random() > t.high) {
             modifications++;
+            changeLog.push({
+              type: "contraction",
+              original: match,
+              replacement,
+              reason: "Les contractions familières (« y'a », « p'têt ») renforcent le ton naturel et oral.",
+            });
             return replacement;
           }
           return match;
@@ -294,18 +336,29 @@ export const useTextCleaner = () => {
       const insertIndex = Math.floor(Math.random() * (paragraphs.length - 1)) + 1;
       const lastSentence = paragraphs[insertIndex - 1];
       if (lastSentence && lastSentence.endsWith(".")) {
-        paragraphs[insertIndex - 1] = lastSentence.slice(0, -1) + ". " + 
-          rhetoricalQuestions[Math.floor(Math.random() * rhetoricalQuestions.length)];
+        const question = rhetoricalQuestions[Math.floor(Math.random() * rhetoricalQuestions.length)];
+        paragraphs[insertIndex - 1] = lastSentence.slice(0, -1) + ". " + question;
         modifications++;
+        changeLog.push({
+          type: "rhetorical_question",
+          original: lastSentence.slice(0, Math.min(60, lastSentence.length)) + (lastSentence.length > 60 ? "..." : ""),
+          replacement: paragraphs[insertIndex - 1].slice(0, Math.min(60, paragraphs[insertIndex - 1].length)) + (paragraphs[insertIndex - 1].length > 60 ? "..." : ""),
+          reason: "Les questions rhétoriques interrompent le discours trop linéaire et prévisible de l'IA.",
+        });
+        result = paragraphs.join("\n\n");
       }
-      result = paragraphs.join("\n\n");
     }
 
-    // 8. Introduire de légères imperfections (fautes de frappe corrigées visuellement)
-    // Ajouter des répétitions naturelles
+    // 8. Introduire de légères imperfections
     result = result.replace(/\b(très|vraiment|assez)\b/gi, (match) => {
       if (Math.random() > t.high) {
         modifications++;
+        changeLog.push({
+          type: "repetition",
+          original: match,
+          replacement: match + ", " + match,
+          reason: "Les répétitions naturelles (« très, très ») cassent la perfection syntaxique excessive caractéristique de l'IA.",
+        });
         return match + ", " + match;
       }
       return match;
@@ -316,7 +369,14 @@ export const useTextCleaner = () => {
       if (Math.random() > t.medium) {
         modifications++;
         const alternatives = ["→", "—", "·", "∙"];
-        return alternatives[Math.floor(Math.random() * alternatives.length)];
+        const alt = alternatives[Math.floor(Math.random() * alternatives.length)];
+        changeLog.push({
+          type: "list_style",
+          original: match,
+          replacement: alt,
+          reason: "Varier les puces empêche la structure trop régulière et mécanique caractéristique de l'IA.",
+        });
+        return alt;
       }
       return match;
     });
@@ -330,12 +390,18 @@ export const useTextCleaner = () => {
 
     parentheticalInserts.forEach(([pattern, replacement]) => {
       if (Math.random() > t.high) {
-        result = result.replace(pattern as RegExp, () => {
+        result = result.replace(pattern as RegExp, (match) => {
           if (Math.random() > t.high) {
             modifications++;
+            changeLog.push({
+              type: "parenthetical",
+              original: match,
+              replacement: replacement as string,
+              reason: "Les parenthèses explicatives ajoutent une voix personnelle, nuancée et spontanée.",
+            });
             return replacement as string;
           }
-          return (pattern as RegExp).source;
+          return match;
         });
       }
     });
@@ -343,6 +409,7 @@ export const useTextCleaner = () => {
     return {
       humanizedText: result,
       modificationsCount: modifications,
+      changeLog,
     };
   }, [humanizeIntensity]);
 

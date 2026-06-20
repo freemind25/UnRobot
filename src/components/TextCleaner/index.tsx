@@ -7,6 +7,7 @@ import { ActionBar } from "./ActionBar";
 import { CleaningStats } from "./CleaningStats";
 import { IntensitySlider } from "./IntensitySlider";
 import { AIAnalysis } from "./AIAnalysis";
+import { HumanizeLog } from "./HumanizeLog";
 import { useTextCleaner } from "@/hooks/useTextCleaner";
 import { useAIDetector, AIAnalysisResult } from "@/hooks/useAIDetector";
 import { FileText, AlertTriangle } from "lucide-react";
@@ -192,6 +193,13 @@ export const TextCleaner: React.FC = () => {
                 totalCleaned={stats.totalCleaned}
                 isVisible={isCleaned}
               />
+            </div>
+          )}
+
+          {/* Humanize change log */}
+          {isHumanized && humanizeStats && (
+            <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.45s" }}>
+              <HumanizeLog changeLog={humanizeStats.changeLog} />
             </div>
           )}
         </main>

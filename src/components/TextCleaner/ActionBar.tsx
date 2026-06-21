@@ -84,7 +84,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         size="lg"
         onClick={onAnalyze}
         disabled={!hasText || isProcessing || isHumanizing || isAnalyzing}
-        className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10 hover:text-blue-400"
+        className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
       >
         {isAnalyzing ? (
           <>

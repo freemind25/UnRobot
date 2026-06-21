@@ -62,8 +62,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         onClick={onHumanize}
         disabled={!hasText || isProcessing || isHumanizing}
         className={cn(
-          "relative overflow-hidden bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0",
-          isHumanized && "ring-2 ring-violet-400 ring-offset-2 ring-offset-background"
+          "relative overflow-hidden",
+          isHumanized && "ring-2 ring-primary/60 ring-offset-2 ring-offset-background"
         )}
       >
         {isHumanizing ? (
@@ -84,7 +84,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         size="lg"
         onClick={onAnalyze}
         disabled={!hasText || isProcessing || isHumanizing || isAnalyzing}
-        className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10 hover:text-blue-400"
+        className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
       >
         {isAnalyzing ? (
           <>

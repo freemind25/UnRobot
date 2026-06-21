@@ -36,7 +36,7 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({ value, onChang
   };
 
   const Icon = value === "light" ? ZapOff : value === "moderate" ? Zap : Flame;
-  const iconColor = value === "light" ? "text-muted-foreground" : value === "moderate" ? "text-primary" : "text-orange-500";
+  const iconColor = value === "light" ? "text-muted-foreground" : value === "moderate" ? "text-primary" : "text-warning";
 
   return (
     <div className="space-y-3 p-4 rounded-lg border border-border bg-card/50">

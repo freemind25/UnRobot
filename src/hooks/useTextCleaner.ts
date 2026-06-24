@@ -6,6 +6,7 @@ import type {
   ChangeLog,
 } from "@/lib/humanizer";
 import type { CleanStats } from "@/lib/cleaner";
+import type { WriterProfile } from "@/lib/writerProfile";
 
 export type { HumanizeIntensity, HumanizeMode, HumanizeStats, ChangeLog };
 export type { CleanStats };
@@ -21,6 +22,7 @@ export const useTextCleaner = () => {
   const [intensity, setIntensity] = useState<HumanizeIntensity>("moderate");
   const [mode, setMode] = useState<HumanizeMode>("naturel");
   const [untilNatural, setUntilNatural] = useState(false);
+  const [profile, setProfile] = useState<WriterProfile | null>(null);
 
   const workerRef = useRef<Worker | null>(null);
 
@@ -63,9 +65,10 @@ export const useTextCleaner = () => {
         // "Humanize until natural" : on vise un score IA <= 30%.
         targetScore: untilNatural ? 30 : undefined,
         maxPasses: 6,
+        profile,
       },
     });
-  }, [text, intensity, mode, untilNatural]);
+  }, [text, intensity, mode, untilNatural, profile]);
 
   const clearAll = useCallback(() => {
     setText("");
@@ -94,6 +97,8 @@ export const useTextCleaner = () => {
     setMode,
     untilNatural,
     setUntilNatural,
+    profile,
+    setProfile,
     performClean,
     performHumanize,
     clearAll,

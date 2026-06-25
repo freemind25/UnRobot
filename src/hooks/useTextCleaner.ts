@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import type {
   HumanizeIntensity,
   HumanizeMode,
@@ -11,8 +12,17 @@ import type { WriterProfile } from "@/lib/writerProfile";
 export type { HumanizeIntensity, HumanizeMode, HumanizeStats, ChangeLog };
 export type { CleanStats };
 
+const STORAGE_KEY = "unrobot:draft-text";
+const MAX_HISTORY = 5;
+
 export const useTextCleaner = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) ?? "";
+    } catch {
+      return "";
+    }
+  });
   const [isProcessing, setIsProcessing] = useState(false);
   const [isHumanizing, setIsHumanizing] = useState(false);
   const [isCleaned, setIsCleaned] = useState(false);
@@ -23,6 +33,8 @@ export const useTextCleaner = () => {
   const [mode, setMode] = useState<HumanizeMode>("naturel");
   const [untilNatural, setUntilNatural] = useState(false);
   const [profile, setProfile] = useState<WriterProfile | null>(null);
+  // Pile d'historique (jusqu'à MAX_HISTORY versions précédentes) pour "Annuler".
+  const [history, setHistory] = useState<string[]>([]);
 
   const workerRef = useRef<Worker | null>(null);
 
@@ -44,17 +56,43 @@ export const useTextCleaner = () => {
       }
     };
 
+    workerRef.current.onerror = (err) => {
+      console.error("Worker error:", err);
+      setIsProcessing(false);
+      setIsHumanizing(false);
+      toast.error("Une erreur est survenue pendant le traitement, veuillez réessayer.");
+    };
+
     return () => workerRef.current?.terminate();
+  }, []);
+
+  // Persistance locale du texte en cours (debounce ~1s).
+  useEffect(() => {
+    const id = setTimeout(() => {
+      try {
+        if (text) localStorage.setItem(STORAGE_KEY, text);
+        else localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* quota / mode privé : on ignore */
+      }
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [text]);
+
+  const pushHistory = useCallback((snapshot: string) => {
+    setHistory((prev) => [...prev, snapshot].slice(-MAX_HISTORY));
   }, []);
 
   const performClean = useCallback(() => {
     if (!text || !workerRef.current) return;
+    pushHistory(text);
     setIsProcessing(true);
     workerRef.current.postMessage({ action: "clean", text });
-  }, [text]);
+  }, [text, pushHistory]);
 
   const performHumanize = useCallback(() => {
     if (!text || !workerRef.current) return;
+    pushHistory(text);
     setIsHumanizing(true);
     workerRef.current.postMessage({
       action: "humanize",
@@ -68,7 +106,21 @@ export const useTextCleaner = () => {
         profile,
       },
     });
-  }, [text, intensity, mode, untilNatural, profile]);
+  }, [text, intensity, mode, untilNatural, profile, pushHistory]);
+
+  const undo = useCallback(() => {
+    setHistory((prev) => {
+      if (prev.length === 0) return prev;
+      const previous = prev[prev.length - 1];
+      setText(previous);
+      setIsCleaned(false);
+      setIsHumanized(false);
+      setStats(null);
+      setHumanizeStats(null);
+      toast.success("Version précédente restaurée");
+      return prev.slice(0, -1);
+    });
+  }, []);
 
   const clearAll = useCallback(() => {
     setText("");
@@ -76,6 +128,12 @@ export const useTextCleaner = () => {
     setIsHumanized(false);
     setStats(null);
     setHumanizeStats(null);
+    setHistory([]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   const wordCount = useMemo(() => {
@@ -101,6 +159,8 @@ export const useTextCleaner = () => {
     setProfile,
     performClean,
     performHumanize,
+    undo,
+    canUndo: history.length > 0,
     clearAll,
     wordCount,
   };

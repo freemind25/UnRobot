@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Download, Trash2, Copy, Check, UserRound, ScanSearch } from "lucide-react";
+import { Sparkles, Download, Trash2, Copy, Check, UserRound, ScanSearch, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ interface ActionBarProps {
   onClear: () => void;
   onCopy: () => void;
   onAnalyze: () => void;
+  onUndo: () => void;
   hasText: boolean;
   isCleaned: boolean;
   isHumanized: boolean;
@@ -17,6 +18,7 @@ interface ActionBarProps {
   isProcessing: boolean;
   isHumanizing: boolean;
   isAnalyzing: boolean;
+  canUndo: boolean;
 }
 
 export const ActionBar: React.FC<ActionBarProps> = ({
@@ -26,6 +28,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onClear,
   onCopy,
   onAnalyze,
+  onUndo,
   hasText,
   isCleaned,
   isHumanized,
@@ -33,6 +36,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   isProcessing,
   isHumanizing,
   isAnalyzing,
+  canUndo,
 }) => {
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -138,6 +142,16 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       >
         <Trash2 className="w-5 h-5" />
         Effacer
+      </Button>
+
+      <Button
+        variant="outline"
+        size="lg"
+        onClick={onUndo}
+        disabled={!canUndo || isProcessing || isHumanizing}
+      >
+        <Undo2 className="w-5 h-5" />
+        Annuler
       </Button>
     </div>
   );

@@ -52,11 +52,11 @@ export const TextCleaner: React.FC = () => {
     setIsAnalyzing(true);
     // Calcul léger, on simule un court délai pour le retour visuel
     window.requestAnimationFrame(() => {
-      const result = analyzeText(text);
+      const result = analyzeText(text, mode);
       setAnalysis(result);
       setIsAnalyzing(false);
     });
-  }, [text, hasText, analyzeText]);
+  }, [text, hasText, mode, analyzeText]);
 
   const handleCopy = useCallback(async () => {
     if (!hasText) return;
@@ -109,10 +109,10 @@ export const TextCleaner: React.FC = () => {
     };
     if (!win.requestIdleCallback) return;
     const handle = win.requestIdleCallback(() => {
-      setAnalysis(analyzeText(text));
+      setAnalysis(analyzeText(text, mode));
     }, { timeout: 2000 });
     return () => win.cancelIdleCallback?.(handle);
-  }, [text, analyzeText]);
+  }, [text, mode, analyzeText]);
 
   return (
     <div className="container mx-auto max-w-4xl p-4 space-y-6">

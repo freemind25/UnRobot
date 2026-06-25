@@ -4,6 +4,7 @@ import { useTextCleaner } from "@/hooks/useTextCleaner";
 import { useAIDetector, AIAnalysisResult } from "@/hooks/useAIDetector";
 import { Header } from "./Header";
 import { TextEditor } from "./TextEditor";
+import { FileDropZone } from "./FileDropZone";
 import { ActionBar } from "./ActionBar";
 import { IntensitySlider } from "./IntensitySlider";
 import { CleaningStats } from "./CleaningStats";
@@ -37,6 +38,8 @@ export const TextCleaner: React.FC = () => {
     setUntilNatural,
     profile,
     setProfile,
+    undo,
+    canUndo,
   } = useTextCleaner();
 
   const { analyzeText } = useAIDetector();
@@ -89,6 +92,15 @@ export const TextCleaner: React.FC = () => {
     setAnalysis(null);
   }, [clearAll]);
 
+  const handleFileLoad = useCallback(
+    (content: string, fileName: string) => {
+      setText(content);
+      setAnalysis(null);
+      toast.success(`Fichier « ${fileName} » importé`);
+    },
+    [setText]
+  );
+
   const handleReportJSON = useCallback(() => {
     if (!hasText) return;
     downloadReportJSON({ generatedAt: new Date().toISOString(), text, analysis, humanize: humanizeStats });
@@ -135,6 +147,7 @@ export const TextCleaner: React.FC = () => {
         ))}
       </div>
       <TextEditor value={text} onChange={setText} />
+      <FileDropZone onFileLoad={handleFileLoad} onError={(m) => toast.error(m)} />
       <ModeSelector
         mode={mode}
         onModeChange={setMode}
@@ -150,6 +163,8 @@ export const TextCleaner: React.FC = () => {
         onClear={handleClear}
         onCopy={handleCopy}
         onAnalyze={handleAnalyze}
+        onUndo={undo}
+        canUndo={canUndo}
         hasText={hasText}
         isCleaned={isCleaned}
         isHumanized={isHumanized}
@@ -165,7 +180,7 @@ export const TextCleaner: React.FC = () => {
           <FileJson className="w-3.5 h-3.5" /> JSON
         </Button>
         <Button variant="outline" size="sm" onClick={handleReportPDF} disabled={!hasText}>
-          <FileDown className="w-3.5 h-3.5" /> PDF
+          <FileDown className="w-3.5 h-3.5" /> Imprimer / PDF
         </Button>
       </div>
 

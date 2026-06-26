@@ -34,6 +34,40 @@ export interface ChecklistItem {
 
 export type Severity = "low" | "medium" | "high";
 
+/**
+ * Mode de réécriture (registre cible). Défini ici comme source canonique
+ * et ré-exporté par humanizer.ts sous le nom HumanizeMode pour ne pas
+ * casser les imports existants.
+ */
+export type ScoreMode = "naturel" | "professionnel" | "academique" | "expert" | "personnel";
+
+/**
+ * Tolérance par mode : pondère la CONTRIBUTION de certains indicateurs au
+ * score IA final, sans jamais modifier les sous-scores bruts (affichés
+ * tels quels à l'utilisateur comme diagnostics neutres).
+ *   > 1  → l'indicateur est plus pénalisant dans ce mode (signal plus suspect)
+ *   < 1  → l'indicateur est davantage toléré dans ce mode (registre attendu)
+ *
+ * Justification :
+ * - perfection (absence de marques d'oralité) : très suspect en mode
+ *   "naturel"/"personnel" (on attend de l'oralité), normal en
+ *   "académique"/"professionnel" (le registre soutenu n'a pas à en avoir).
+ * - transition (connecteurs logiques formels comme "par conséquent") :
+ *   normal en académique/professionnel, plus suspect en naturel/personnel.
+ * - staccato (fragments courts et dramatiques) : plus déplacé en
+ *   académique/professionnel/expert, plus toléré en style oral/personnel.
+ */
+const MODE_TOLERANCE: Record<
+  ScoreMode,
+  { perfection: number; transition: number; voice: number; staccato: number }
+> = {
+  naturel: { perfection: 1.3, transition: 1.2, voice: 1.0, staccato: 0.7 },
+  personnel: { perfection: 1.5, transition: 1.3, voice: 1.0, staccato: 0.5 },
+  professionnel: { perfection: 0.8, transition: 0.9, voice: 1.0, staccato: 1.1 },
+  academique: { perfection: 0.5, transition: 0.6, voice: 0.9, staccato: 1.3 },
+  expert: { perfection: 0.8, transition: 0.8, voice: 0.9, staccato: 1.1 },
+};
+
 interface PatternDef {
   category: string;
   severity: Severity;
@@ -130,7 +164,7 @@ const detectStaccato = (sentences: string[]): number => {
 };
 
 /** Analyse complète d'un texte. Pure, déterministe (hors aléatoire : aucun). */
-export function analyzeText(text: string): AIAnalysisResult {
+export function analyzeText(text: string, mode: ScoreMode = "naturel"): AIAnalysisResult {
   if (!text || text.length < 50) {
     return {
       score: 0,
@@ -256,9 +290,10 @@ export function analyzeText(text: string): AIAnalysisResult {
   });
 
   const staccatoHits = detectStaccato(sentences);
+  let staccatoPoints = 0;
   if (staccatoHits > 0) {
     patternCount += staccatoHits;
-    patternPoints += staccatoHits * 5;
+    staccatoPoints = staccatoHits * 5;
     patternHits["Phrasé staccato"] = true;
     details.push({
       category: "Phrasé staccato",
@@ -268,25 +303,34 @@ export function analyzeText(text: string): AIAnalysisResult {
     });
   }
 
+  // Pondération par mode (cf. MODE_TOLERANCE) : on ne touche pas aux
+  // sous-scores bruts ci-dessus (toujours affichés tels quels), on
+  // pondère uniquement leur poids dans l'agrégation finale.
+  const tol = MODE_TOLERANCE[mode] ?? MODE_TOLERANCE.naturel;
+  const weightedTransition = transitionScore * tol.transition;
+  const weightedPerfection = perfectionScore * tol.perfection;
+  const weightedVoice = voiceScore * tol.voice;
+  const weightedStaccatoPoints = staccatoPoints * tol.staccato;
+
   const score = clamp(
     burstinessScore * 0.2 +
-      transitionScore * 0.15 +
-      perfectionScore * 0.15 +
-      voiceScore * 0.2 +
+      weightedTransition * 0.15 +
+      weightedPerfection * 0.15 +
+      weightedVoice * 0.2 +
       perplexityScore * 0.1 +
       vocabularyScore * 0.1 +
       depthScore * 0.1 +
-      Math.min(40, patternPoints)
+      Math.min(40, patternPoints + weightedStaccatoPoints)
   );
 
   const humanizationScore = clamp(100 - score);
 
   // Score SUCKS (Specific, Unique, Clear, Simple, Sticky) — heuristique locale 0-100.
   const specific = clamp(100 - depthScore * 0.6 + (digits + properNouns > 3 ? 20 : 0));
-  const unique = clamp(100 - voiceScore * 0.7 - (patternHits["Langage vague"] ? 25 : 0));
-  const clear = clamp(100 - transitionScore * 0.5 - (patternHits["Jargon corporate"] ? 25 : 0));
+  const unique = clamp(100 - weightedVoice * 0.7 - (patternHits["Langage vague"] ? 25 : 0));
+  const clear = clamp(100 - weightedTransition * 0.5 - (patternHits["Jargon corporate"] ? 25 : 0));
   const simple = clamp(100 - vocabularyScore * 0.4 - (avgLength > 25 ? 25 : 0));
-  const sticky = clamp(100 - perfectionScore * 0.5 - (patternHits["Phrases rhétoriques interdites"] ? 20 : 0));
+  const sticky = clamp(100 - weightedPerfection * 0.5 - (patternHits["Phrases rhétoriques interdites"] ? 20 : 0));
   const sucksScore = clamp((specific + unique + clear + simple + sticky) / 5);
 
   const checklist: ChecklistItem[] = [

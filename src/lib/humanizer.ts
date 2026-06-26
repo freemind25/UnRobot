@@ -1,9 +1,11 @@
 import { analyzeText } from "./textAnalysis";
+import type { ScoreMode } from "./textAnalysis";
 import type { WriterProfile } from "./writerProfile";
 import { applyProfile } from "./writerProfile";
 
 export type HumanizeIntensity = "light" | "moderate" | "aggressive";
-export type HumanizeMode = "naturel" | "professionnel" | "academique" | "expert" | "personnel";
+/** Alias de ScoreMode (textAnalysis.ts) : un seul type de mode dans toute l'app. */
+export type HumanizeMode = ScoreMode;
 
 export interface ChangeLog {
   type: string;
@@ -165,6 +167,27 @@ const RULES: Rule[] = [
     minIntensity: "light",
     modes: ["professionnel", "expert", "academique"],
   },
+
+  // --- Variation lexicale (bruit stylistique léger, intensité aggressive) ---
+  // Objectif : casser la répétition mécanique sans jamais introduire de
+  // faute. Le mot d'origine fait partie des choix possibles, pour éviter
+  // de systématiquement remplacer CHAQUE occurrence (un humain ne le
+  // ferait pas non plus).
+  {
+    type: "variation_lexicale",
+    reason: "Variation d'un intensificateur surutilisé pour casser la répétition",
+    regex: /\btrès\s+/gi,
+    to: ["vraiment ", "particulièrement ", "franchement ", "très "],
+    minIntensity: "aggressive",
+    modes: ["naturel", "personnel"],
+  },
+  {
+    type: "variation_lexicale",
+    reason: "Variation lexicale d'un mot courant pour casser la répétition",
+    regex: /\bimportant\b/gi,
+    to: ["important", "essentiel", "central", "majeur"],
+    minIntensity: "aggressive",
+  },
 ];
 
 /** Un seul passage de réécriture. Retourne le texte + le journal. */
@@ -207,7 +230,7 @@ export function performHumanize(inputText: string, options: HumanizeOptions = {}
   const maxPasses = options.maxPasses ?? 5;
 
   // 1. Analyse initiale
-  const scoreBefore = analyzeText(inputText).score;
+  const scoreBefore = analyzeText(inputText, mode).score;
 
   let current = inputText;
   const changeLog: ChangeLog[] = [];
@@ -232,13 +255,13 @@ export function performHumanize(inputText: string, options: HumanizeOptions = {}
 
     if (target === undefined) break;
 
-    const verify = analyzeText(current).score;
+    const verify = analyzeText(current, mode).score;
     if (verify <= target) break;
     // Correction : si pas de modification ce tour, on arrête (pas de progrès possible).
     if (passLog.length === 0) break;
   }
 
-  const scoreAfter = analyzeText(current).score;
+  const scoreAfter = analyzeText(current, mode).score;
 
   return {
     humanizedText: current,

@@ -28,3 +28,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+skills/
+tool-results/
+scripts/gen-icons.py

@@ -114,7 +114,7 @@ export const AI_PATTERNS: PatternDef[] = [
     category: "Emphase artificielle",
     severity: "high",
     points: 8,
-    regex: /\b(constitue un témoignage|joue un rôle (vital|significatif|cruciel|déterminant)|met en lumière son importance|reflète une tendance plus large|ouvrant la voie à|marquant un tournant|façonnant le|point central|marque indélébile|profondément ancré|contribuant à)\b/gi,
+    regex: /\b(constitue un témoignage|joue un rôle (vital|significatif|crucial|déterminant)|met en lumière son importance|reflète une tendance plus large|ouvrant la voie à|marquant un tournant|façonnant le|point central|marque indélébile|profondément ancré|contribuant à)\b/gi,
     issue: "L'importance est gonflée artificiellement avec des formules vides.",
     suggestion: "Énoncez les faits directement, sans affirmer leur importance.",
   },
@@ -161,11 +161,11 @@ export const AI_PATTERNS: PatternDef[] = [
 
   // #6 Section « Défis et perspectives »
   {
-    category: "Squelette formulaique",
+    category: "Squelette stéréotypé",
     severity: "high",
     points: 8,
     regex: /(?:malgré (son|sa|ces|les)\s+\w+.*(?:fait face à|rencontre|doit faire face à)\s+(?:plusieurs\s+)?défis|(?:défis et|perspectives d'avenir|malgré ces défis))/gi,
-    issue: "Section « Défis » formulaique typique des textes IA.",
+    issue: "Section « Défis » stéréotypée typique des textes IA.",
     suggestion: "Remplacez par des faits précis : quels problèmes, quelles dates, quelles réponses.",
   },
 
@@ -713,7 +713,7 @@ export const AI_PATTERNS: PatternDef[] = [
     category: "Structure énumérative",
     severity: "high",
     points: 8,
-    regex: /\b(premièr(?:ement|ement)|deuxièmement|troisièmement|quatrièmement|cinquièmement|ensuite|enfin)\b/gi,
+    regex: /\b(premi[eè]rement|deuxi[eè]mement|troisi[eè]mement|quatri[eè]mement|cinqi[eè]mement|ensuite|enfin)\b/gi,
     issue: "Énumération ordonnée rigide (premièrement, deuxièmement...), typique des textes IA.",
     suggestion: "Utilisez des transitions naturelles ou supprimez les marqueurs d'ordre.",
   },
@@ -976,7 +976,7 @@ function computeStructureScore(text: string, sentences: string[]): number {
   let structPoints = 0;
 
   // 1. Énumération ordonnée
-  const enumerations = text.match(/\b(premièr(?:ement|ement)|deuxièmement|troisièmement|ensuite|enfin)\b/gi) || [];
+  const enumerations = text.match(/\b(premi[eè]rement|deuxi[eè]mement|troisi[eè]mement|ensuite|enfin)\b/gi) || [];
   structPoints += enumerations.length * 8;
 
   // 2. Symétrie des paragraphes : variance des longueurs de paragraphes

@@ -157,7 +157,7 @@ Quand on vous donne un texte à humaniser :
 
 **Mots à surveiller :** malgré son/sa... fait face à plusieurs défis..., malgré ces défis, défis et héritage, perspectives d'avenir
 
-**Problème :** De nombreux textes générés par IA incluent des sections « Défis » formulaiques.
+**Problème :** De nombreux textes générés par IA incluent des sections « Défis » stéréotypées.
 
 **Avant :**
 > Malgré sa prospérité industrielle, Korattur fait face à des défis typiques des zones urbaines, notamment la congestion routière et la pénurie d'eau. Malgré ces défis, grâce à sa position stratégique et aux initiatives en cours, Korattur continue de prospérer en tant que partie intégrante de la croissance de Chennai.
@@ -529,7 +529,7 @@ Fournir :
 - Suppression des fausses échelles (« de X à Y, de A à B »)
 - Suppression des tirets cadratins, émojis, en-têtes en gras et guillemets incohérents
 - Suppression de l'évitement du verbe être (« agit comme », « fonctionne comme », « se présente comme ») au profit de « est »/« sont »
-- Suppression de la section « défis » formulaique (« Malgré les défis... continue de prospérer »)
+- Suppression de la section « défis » stéréotypée (« Malgré les défis... continue de prospérer »)
 - Suppression de l'atténuation liée à la date limite de connaissances (« Bien que des informations précises soient limitées... »)
 - Suppression de l'atténuation excessive (« on pourrait potentiellement avancer que... pourrait avoir »)
 - Suppression des locutions de remplissage (« Afin de », « Au cœur du sujet »)

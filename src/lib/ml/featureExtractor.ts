@@ -59,7 +59,7 @@ export function extractFeatures(text: string, hs: number[]) {
   ).length;
   const connStartRatio = sc > 0 ? connStartCount / sc : 0;
   // Énumération ordonnée
-  const enumCount = (text.match(/\b(premièr(?:ement|ement)|deuxièmement|troisièmement|ensuite|enfin)\b/gi) || []).length;
+  const enumCount = (text.match(/\b(premi[eè]rement|deuxi[eè]mement|troisi[eè]mement|ensuite|enfin)\b/gi) || []).length;
   const structFeatures = [norm(paraCV, 0, 0.6), norm(connStartRatio, 0, 0.5), norm(enumCount, 0, 3), norm(paras.length, 1, 15)];
 
   // ── MODULE 6 : Répétition sémantique (bigram overlap proxy) ────

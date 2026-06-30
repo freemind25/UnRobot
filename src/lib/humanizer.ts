@@ -133,7 +133,7 @@ const RULES: Rule[] = [
   // #6 Section « Défis et perspectives »
   {
     type: "squelette",
-    reason: "Suppression d'une section formulaique « défis » (#6)",
+    reason: "Suppression d'une section stéréotypée « défis » (#6)",
     regex: /Malgré (ces défis|son|sa|les)\s+\w+[^.]*(?:prospérer|croître|poursuivre)/gi,
     to: "",
     minIntensity: "light",
@@ -405,7 +405,7 @@ const RULES: Rule[] = [
   {
     type: "chatbot",
     reason: "Suppression « certainement ! » (#23)",
-    regex: /\bCertinement\s*!?\s*/gi,
+    regex: /\bCertainement\s*!?\s*/gi,
     to: "",
     minIntensity: "light",
   },
@@ -974,7 +974,7 @@ const RULES: Rule[] = [
   {
     type: "structure-enum",
     reason: "Remplacement d'un marqueur d'énumération rigide (#3)",
-    regex: /\bPremièr(?:ement|ement),?\s*/gi,
+    regex: /\bPremi[eè]rement,?\s*/gi,
     to: ["Pour commencer, ", "D'abord, ", "Tout d'abord, "],
     minIntensity: "light",
     modes: ["naturel", "personnel"],

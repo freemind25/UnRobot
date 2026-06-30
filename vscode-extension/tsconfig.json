@@ -1,4 +1,4 @@
 {
-  "compilerOptions": { "module": "commonjs", "target": "ES2020", "outDir": "out", "lib": ["es2020"], "sourceMap": true },
+  "compilerOptions": { "module": "commonjs", "target": "ES2020", "outDir": "out", "lib": ["es2020"], "sourceMap": true, "skipLibCheck": true, "rootDir": "src" },
   "include": ["src/**/*"], "exclude": ["node_modules"]
 }

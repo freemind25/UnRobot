@@ -4,7 +4,16 @@
   "description": "Détecte les commentaires et documentation générés par IA dans votre code. 100% local, même approche que l'application web UnRobot.",
   "version": "0.1.0",
   "publisher": "freemind25",
-  "engines": ["vscode"],
+  "engines": { "vscode": ">=1.85.0" },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "vsce:pack": "npx @vscode/vsce pack --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0",
+    "@vscode/vsce": "^3.2.0"
+  },
   "categories": ["Programming Languages", "Linters"],
   "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",

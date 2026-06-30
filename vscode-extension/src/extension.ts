@@ -88,7 +88,9 @@ function extractComments(doc: vscode.TextDocument): CommentInfo[] {
   return comments;
 }
 
-const decoType = vscode.window.createTextEditorDecorationType("unrobot-ai");
+const decoType = vscode.window.createTextEditorDecorationType({
+  isWholeLine: true,
+});
 
 function scoreLevel(s: number) {
   if (s >= 70) return { color: "#ef4444", msg: `IA: ${s}% — Forte probabilité` };
@@ -128,8 +130,10 @@ export function activate(ctx: vscode.ExtensionContext) {
       const s = analyzeComment(c.text);
       if (s >= thr) {
         diags.push(new vscode.Diagnostic(
-          new vscode.Range(c.line, 0, c.line, c.text.length), "unrobot",
-          `Commentaire possiblement IA (${s}%)`, s >= 70 ? vscode.DiagnosticSeverity.Warning : vscode.DiagnosticSeverity.Information));
+          new vscode.Range(c.line, 0, c.line, c.text.length),
+          `Commentaire possiblement IA (${s}%)`,
+          s >= 70 ? vscode.DiagnosticSeverity.Warning : vscode.DiagnosticSeverity.Information
+        ));
       }
     }
     return diags;

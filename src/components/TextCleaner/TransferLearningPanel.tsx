@@ -27,6 +27,8 @@ const BUILTIN_DATASETS = [
   { file: "UnRobot_Dataset_V8_Professional_LongTexts_250.json", label: "V8 — Longs textes pro", desc: "275 samples (125/150)", ai: 125, human: 150 },
   { file: "UnRobot_Dataset_V9_Style_Personality_Fingerprint_560.json", label: "V9 — Style & fingerprint", desc: "560 samples (280/280)", ai: 280, human: 280 },
   { file: "UnRobot_Dataset_V10_Domain_Experts_300.json", label: "V10 — Experts métier", desc: "300 samples (150/150)", ai: 150, human: 150 },
+  { file: "UnRobot_Dataset_V11_Robustness_Test_200.json", label: "V11 — Test de robustesse", desc: "200 samples (100/100)", ai: 100, human: 100 },
+  { file: "UnRobot_Dataset_V12_Final_Calibration_200.json", label: "V12 — Calibration finale", desc: "200 samples (100/100)", ai: 100, human: 100 },
 ] as const;
 
 export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ onModelLoaded, activeModel }) => {

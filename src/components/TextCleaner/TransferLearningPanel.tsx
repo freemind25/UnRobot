@@ -152,21 +152,21 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Brain className="w-5 h-5 text-primary" />
-            <div>
+            <div className="flex items-center gap-2">
               <h3 className="font-semibold">Modèle personnalisé</h3>
-              <p className="text-xs text-muted-foreground">Transfer Learning in-browser · Pur JavaScript</p>
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={() => setShowHelp(true)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setShowHelp(true); }}
+                className="inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold leading-none cursor-pointer select-none bg-primary text-primary-foreground hover:opacity-80 transition-opacity shrink-0"
+                aria-label="Aide Transfer Learning"
+              >
+                ?
+              </span>
             </div>
+            <p className="text-xs text-muted-foreground">Transfer Learning in-browser · Pur JavaScript</p>
           </div>
-          <span
-            role="button"
-            tabIndex={0}
-            onClick={() => setShowHelp(true)}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setShowHelp(true); }}
-            className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold leading-none cursor-pointer select-none bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-            aria-label="Aide Transfer Learning"
-          >
-            ?
-          </span>
           {activeModel && (
             <div className="text-right">
               <div className="flex items-center gap-1.5 text-success">

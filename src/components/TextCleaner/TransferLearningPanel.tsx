@@ -157,15 +157,16 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
               <p className="text-xs text-muted-foreground">Transfer Learning in-browser · Pur JavaScript</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowHelp(true)}
-              className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              aria-label="Aide"
-            >
-              <HelpCircle className="w-4 h-4" />
-            </button>
-          </div>
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowHelp(true)}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setShowHelp(true); }}
+            className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold leading-none cursor-pointer select-none bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            aria-label="Aide Transfer Learning"
+          >
+            ?
+          </span>
           {activeModel && (
             <div className="text-right">
               <div className="flex items-center gap-1.5 text-success">

@@ -1,0 +1,1002 @@
+[
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 6.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 6.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 6.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 6.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 7.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 7.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 7.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 7.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 8.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 8.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 8.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 8.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 9.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 9.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 9.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 9.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 10.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 10.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 10.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 10.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 11.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 11.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 11.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 11.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 12.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 12.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 12.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 12.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 13.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 13.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 13.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 13.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 14.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 14.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 14.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 14.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 15.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 15.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 15.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 15.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 16.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 16.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 16.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 16.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 17.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 17.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 17.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 17.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 18.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 18.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 18.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 18.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 19.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 19.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 19.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 19.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 20.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 20.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 20.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 20.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 21.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 21.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 21.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 21.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 22.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 22.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 22.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 22.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 23.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 23.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 23.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 23.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 24.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 24.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 24.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 24.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 25.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 25.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 25.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 25.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 26.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 26.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 26.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 26.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 27.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 27.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 27.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 27.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 28.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 28.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 28.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 28.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 29.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 29.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 29.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 29.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 30.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 30.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 30.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 30.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 31.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 31.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 31.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 31.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 32.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 32.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 32.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 32.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 33.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 33.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 33.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 33.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 34.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 34.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 34.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 34.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 35.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 35.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 35.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 35.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 36.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 36.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 36.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 36.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 37.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 37.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 37.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 37.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 38.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 38.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 38.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 38.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 39.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 39.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 39.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 39.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 40.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 40.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 40.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 40.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 41.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 41.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 41.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 41.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 42.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 42.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 42.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 42.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 43.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 43.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 43.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 43.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 44.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 44.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 44.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 44.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 45.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 45.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 45.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 45.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 46.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 46.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 46.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 46.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 47.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 47.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 47.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 47.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 48.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 48.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 48.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 48.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 49.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 49.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 49.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 49.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le texte a été relu plusieurs fois et certaines phrases ont été modifiées pour améliorer la compréhension. Le résultat final garde néanmoins le style initial de l’auteur. Test robustesse 50.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Même si le document semble très structuré, il a été écrit progressivement avec plusieurs corrections et ajouts. Test robustesse 50.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution représente une avancée significative permettant d’améliorer durablement les performances grâce à une approche innovante et efficace. Test robustesse 50.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’analyse complète de cette problématique souligne l’importance d’une stratégie adaptée favorisant une évolution continue. Test robustesse 50.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  }
+]

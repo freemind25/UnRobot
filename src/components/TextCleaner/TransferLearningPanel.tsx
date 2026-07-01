@@ -5,7 +5,7 @@ import {
   saveDatasetToIDB, loadDatasetFromIDB, listDatasetsFromIDB,
   type LabeledText, type TrainingProgress, type CustomModel, DEFAULT_TRAINING_CONFIG,
 } from "@/lib/transfer";
-import { Brain, Play, Square, Trash2, Download, Upload, Check, X, Loader2, Cpu, Save, FolderOpen, HelpCircle } from "lucide-react";
+import { Brain, Play, Square, Trash2, Download, Upload, Check, X, Loader2, Cpu, Save, FolderOpen, HelpCircle, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
@@ -16,6 +16,14 @@ interface TransferLearningPanelProps {
   activeModel: CustomModel | null;
 }
 
+const BUILTIN_DATASETS = [
+  { file: "UnRobot_Dataset_V1_100.json", label: "V1 — Général", desc: "100 samples (50/50)", ai: 50, human: 50 },
+  { file: "UnRobot_Dataset_V2_Academic_100.json", label: "V2 — Académique", desc: "100 samples (50/50)", ai: 50, human: 50 },
+  { file: "UnRobot_Dataset_V3_AI_Advanced_100.json", label: "V3 — IA avancée", desc: "150 samples (IA only)", ai: 150, human: 0 },
+  { file: "UnRobot_Dataset_V4_AntiDetection_150.json", label: "V4 — Anti-détection", desc: "245 samples (145/100)", ai: 145, human: 100 },
+  { file: "UnRobot_Dataset_V5_Balanced_Final_20.json", label: "V5 — Équilibré", desc: "20 samples (10/10)", ai: 10, human: 10 },
+] as const;
+
 export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ onModelLoaded, activeModel }) => {
   const [samples, setSamples] = useState<LabeledText[]>([]);
   const [inputText, setInputText] = useState("");
@@ -25,6 +33,7 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
   const [savedModels, setSavedModels] = useState<CustomModel[]>([]);
   const [epochs, setEpochs] = useState(DEFAULT_TRAINING_CONFIG.epochs);
   const [showModels, setShowModels] = useState(false);
+  const [showBuiltin, setShowBuiltin] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
   const refreshModels = useCallback(async () => {
@@ -102,6 +111,24 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
     };
     reader.readAsText(file);
     e.target.value = "";
+  }, []);
+
+  const [loadingDataset, setLoadingDataset] = useState<string | null>(null);
+
+  const handleLoadBuiltin = useCallback(async (ds: typeof BUILTIN_DATASETS[number]) => {
+    setLoadingDataset(ds.file);
+    try {
+      const res = await fetch(`/datasets/${ds.file}`);
+      if (!res.ok) throw new Error("Fichier introuvable");
+      const data: LabeledText[] = await res.json();
+      if (!Array.isArray(data)) throw new Error("Format invalide");
+      setSamples((prev) => [...prev, ...data.filter((d) => d.text && (d.label === "ai" || d.label === "human"))]);
+      toast.success(`« ${ds.label} » chargé : ${data.length} échantillons ajoutés`);
+    } catch {
+      toast.error(`Impossible de charger « ${ds.label} »`);
+    } finally {
+      setLoadingDataset(null);
+    }
   }, []);
 
   // Charger les modèles au mount
@@ -194,6 +221,47 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
             <Button variant="ghost" size="sm" onClick={() => setSamples([])} className="text-destructive">
               <Trash2 className="w-3.5 h-3.5 mr-1" /> Vider
             </Button>
+          )}
+        </div>
+
+        {/* Datasets intégrés */}
+        <div className="mb-4">
+          <button
+            onClick={() => { setShowModels(false); setShowBuiltin((p) => !p); }}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mb-2"
+            aria-expanded={showBuiltin}
+          >
+            <Database className="w-3 h-3" />
+            Datasets intégrés
+          </button>
+          {showBuiltin && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              {BUILTIN_DATASETS.map((ds) => {
+                const isLoading = loadingDataset === ds.file;
+                const noHuman = ds.human === 0;
+                return (
+                  <button
+                    key={ds.file}
+                    onClick={() => handleLoadBuiltin(ds)}
+                    disabled={isLoading}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md border border-border bg-background/60 hover:bg-accent/40 disabled:opacity-50 text-left transition-colors"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-primary shrink-0" />
+                    ) : (
+                      <Database className="w-3.5 h-3.5 text-primary shrink-0" />
+                    )}
+                    <div className="min-w-0">
+                      <div className="text-xs font-medium text-foreground truncate">{ds.label}</div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {ds.desc}
+                        {noHuman && <span className="text-destructive ml-1">⚠ IA uniquement</span>}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           )}
         </div>
 

@@ -1,0 +1,502 @@
+[
+  {
+    "text": "Lors de l’analyse du projet, j’ai remarqué que certaines étapes prévues au départ ont dû être modifiées après les premiers tests. Les résultats étaient corrects mais plusieurs détails techniques demandaient encore des ajustements. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai choisi cette méthode parce qu’elle correspondait mieux aux contraintes rencontrées pendant le travail. Une autre solution était possible, mais elle demandait plus de ressources et apportait peu d’améliorations. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Pendant la réunion, plusieurs points ont été discutés notamment les délais et la répartition des tâches. Finalement, l’équipe a décidé de modifier l’organisation initiale. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le document a été préparé progressivement. Certaines parties ont été réécrites plusieurs fois afin de mieux correspondre aux objectifs fixés. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans mon expérience, ce type d’outil peut être utile, mais il faut toujours vérifier les résultats obtenus avant de les utiliser directement. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les premières observations montrent une amélioration, même si quelques problèmes restent présents. Il faudra probablement effectuer d’autres essais avant de tirer une conclusion définitive. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai constaté une différence entre ce qui était prévu dans la théorie et ce qui s’est réellement produit lors de l’application. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche fonctionne dans certains cas, mais elle présente aussi des limites liées aux données disponibles. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le développement de cette fonctionnalité a commencé par une version simple puis plusieurs améliorations ont été ajoutées selon les besoins. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Après comparaison des résultats, j’ai retenu cette option car elle semblait plus adaptée au contexte étudié. Exemple variation 1.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intelligence artificielle représente aujourd’hui une avancée majeure qui transforme profondément les pratiques dans de nombreux secteurs. Elle offre des opportunités considérables pour améliorer l’efficacité et optimiser les processus. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans un contexte en constante évolution, les organisations doivent adopter des solutions innovantes afin de répondre aux nouveaux défis. Cette approche permet d’améliorer significativement les performances globales. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution présente plusieurs avantages importants. Premièrement, elle améliore la productivité. Deuxièmement, elle facilite la prise de décision. Enfin, elle contribue à une meilleure optimisation des ressources. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "La transformation numérique constitue un enjeu majeur pour les entreprises modernes. Elle permet d’intégrer des technologies performantes et de favoriser une évolution durable des pratiques. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette analyse met en évidence l’importance d’une stratégie structurée permettant d’atteindre les objectifs fixés tout en améliorant continuellement les résultats obtenus. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Grâce à ses capacités avancées, cette technologie représente une opportunité stratégique pour répondre efficacement aux besoins actuels et futurs. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche globale permet non seulement d’améliorer les performances mais également de renforcer la compétitivité dans un environnement fortement concurrentiel. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intégration de solutions intelligentes constitue une évolution incontournable qui offre de nouvelles perspectives et contribue à une meilleure adaptation aux changements. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les résultats démontrent clairement l’impact positif de cette méthode sur l’efficacité organisationnelle et la qualité des services proposés. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "En conclusion, cette réflexion souligne les nombreux bénéfices associés à cette solution et confirme l’importance de poursuivre son développement. Analyse complémentaire numéro 1.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Lors de l’analyse du projet, j’ai remarqué que certaines étapes prévues au départ ont dû être modifiées après les premiers tests. Les résultats étaient corrects mais plusieurs détails techniques demandaient encore des ajustements. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai choisi cette méthode parce qu’elle correspondait mieux aux contraintes rencontrées pendant le travail. Une autre solution était possible, mais elle demandait plus de ressources et apportait peu d’améliorations. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Pendant la réunion, plusieurs points ont été discutés notamment les délais et la répartition des tâches. Finalement, l’équipe a décidé de modifier l’organisation initiale. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le document a été préparé progressivement. Certaines parties ont été réécrites plusieurs fois afin de mieux correspondre aux objectifs fixés. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans mon expérience, ce type d’outil peut être utile, mais il faut toujours vérifier les résultats obtenus avant de les utiliser directement. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les premières observations montrent une amélioration, même si quelques problèmes restent présents. Il faudra probablement effectuer d’autres essais avant de tirer une conclusion définitive. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai constaté une différence entre ce qui était prévu dans la théorie et ce qui s’est réellement produit lors de l’application. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche fonctionne dans certains cas, mais elle présente aussi des limites liées aux données disponibles. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le développement de cette fonctionnalité a commencé par une version simple puis plusieurs améliorations ont été ajoutées selon les besoins. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Après comparaison des résultats, j’ai retenu cette option car elle semblait plus adaptée au contexte étudié. Exemple variation 2.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intelligence artificielle représente aujourd’hui une avancée majeure qui transforme profondément les pratiques dans de nombreux secteurs. Elle offre des opportunités considérables pour améliorer l’efficacité et optimiser les processus. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans un contexte en constante évolution, les organisations doivent adopter des solutions innovantes afin de répondre aux nouveaux défis. Cette approche permet d’améliorer significativement les performances globales. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution présente plusieurs avantages importants. Premièrement, elle améliore la productivité. Deuxièmement, elle facilite la prise de décision. Enfin, elle contribue à une meilleure optimisation des ressources. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "La transformation numérique constitue un enjeu majeur pour les entreprises modernes. Elle permet d’intégrer des technologies performantes et de favoriser une évolution durable des pratiques. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette analyse met en évidence l’importance d’une stratégie structurée permettant d’atteindre les objectifs fixés tout en améliorant continuellement les résultats obtenus. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Grâce à ses capacités avancées, cette technologie représente une opportunité stratégique pour répondre efficacement aux besoins actuels et futurs. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche globale permet non seulement d’améliorer les performances mais également de renforcer la compétitivité dans un environnement fortement concurrentiel. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intégration de solutions intelligentes constitue une évolution incontournable qui offre de nouvelles perspectives et contribue à une meilleure adaptation aux changements. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les résultats démontrent clairement l’impact positif de cette méthode sur l’efficacité organisationnelle et la qualité des services proposés. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "En conclusion, cette réflexion souligne les nombreux bénéfices associés à cette solution et confirme l’importance de poursuivre son développement. Analyse complémentaire numéro 2.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Lors de l’analyse du projet, j’ai remarqué que certaines étapes prévues au départ ont dû être modifiées après les premiers tests. Les résultats étaient corrects mais plusieurs détails techniques demandaient encore des ajustements. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai choisi cette méthode parce qu’elle correspondait mieux aux contraintes rencontrées pendant le travail. Une autre solution était possible, mais elle demandait plus de ressources et apportait peu d’améliorations. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Pendant la réunion, plusieurs points ont été discutés notamment les délais et la répartition des tâches. Finalement, l’équipe a décidé de modifier l’organisation initiale. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le document a été préparé progressivement. Certaines parties ont été réécrites plusieurs fois afin de mieux correspondre aux objectifs fixés. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans mon expérience, ce type d’outil peut être utile, mais il faut toujours vérifier les résultats obtenus avant de les utiliser directement. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les premières observations montrent une amélioration, même si quelques problèmes restent présents. Il faudra probablement effectuer d’autres essais avant de tirer une conclusion définitive. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai constaté une différence entre ce qui était prévu dans la théorie et ce qui s’est réellement produit lors de l’application. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche fonctionne dans certains cas, mais elle présente aussi des limites liées aux données disponibles. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le développement de cette fonctionnalité a commencé par une version simple puis plusieurs améliorations ont été ajoutées selon les besoins. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Après comparaison des résultats, j’ai retenu cette option car elle semblait plus adaptée au contexte étudié. Exemple variation 3.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intelligence artificielle représente aujourd’hui une avancée majeure qui transforme profondément les pratiques dans de nombreux secteurs. Elle offre des opportunités considérables pour améliorer l’efficacité et optimiser les processus. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans un contexte en constante évolution, les organisations doivent adopter des solutions innovantes afin de répondre aux nouveaux défis. Cette approche permet d’améliorer significativement les performances globales. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution présente plusieurs avantages importants. Premièrement, elle améliore la productivité. Deuxièmement, elle facilite la prise de décision. Enfin, elle contribue à une meilleure optimisation des ressources. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "La transformation numérique constitue un enjeu majeur pour les entreprises modernes. Elle permet d’intégrer des technologies performantes et de favoriser une évolution durable des pratiques. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette analyse met en évidence l’importance d’une stratégie structurée permettant d’atteindre les objectifs fixés tout en améliorant continuellement les résultats obtenus. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Grâce à ses capacités avancées, cette technologie représente une opportunité stratégique pour répondre efficacement aux besoins actuels et futurs. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche globale permet non seulement d’améliorer les performances mais également de renforcer la compétitivité dans un environnement fortement concurrentiel. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intégration de solutions intelligentes constitue une évolution incontournable qui offre de nouvelles perspectives et contribue à une meilleure adaptation aux changements. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les résultats démontrent clairement l’impact positif de cette méthode sur l’efficacité organisationnelle et la qualité des services proposés. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "En conclusion, cette réflexion souligne les nombreux bénéfices associés à cette solution et confirme l’importance de poursuivre son développement. Analyse complémentaire numéro 3.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Lors de l’analyse du projet, j’ai remarqué que certaines étapes prévues au départ ont dû être modifiées après les premiers tests. Les résultats étaient corrects mais plusieurs détails techniques demandaient encore des ajustements. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai choisi cette méthode parce qu’elle correspondait mieux aux contraintes rencontrées pendant le travail. Une autre solution était possible, mais elle demandait plus de ressources et apportait peu d’améliorations. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Pendant la réunion, plusieurs points ont été discutés notamment les délais et la répartition des tâches. Finalement, l’équipe a décidé de modifier l’organisation initiale. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le document a été préparé progressivement. Certaines parties ont été réécrites plusieurs fois afin de mieux correspondre aux objectifs fixés. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans mon expérience, ce type d’outil peut être utile, mais il faut toujours vérifier les résultats obtenus avant de les utiliser directement. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les premières observations montrent une amélioration, même si quelques problèmes restent présents. Il faudra probablement effectuer d’autres essais avant de tirer une conclusion définitive. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai constaté une différence entre ce qui était prévu dans la théorie et ce qui s’est réellement produit lors de l’application. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche fonctionne dans certains cas, mais elle présente aussi des limites liées aux données disponibles. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le développement de cette fonctionnalité a commencé par une version simple puis plusieurs améliorations ont été ajoutées selon les besoins. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Après comparaison des résultats, j’ai retenu cette option car elle semblait plus adaptée au contexte étudié. Exemple variation 4.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intelligence artificielle représente aujourd’hui une avancée majeure qui transforme profondément les pratiques dans de nombreux secteurs. Elle offre des opportunités considérables pour améliorer l’efficacité et optimiser les processus. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans un contexte en constante évolution, les organisations doivent adopter des solutions innovantes afin de répondre aux nouveaux défis. Cette approche permet d’améliorer significativement les performances globales. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution présente plusieurs avantages importants. Premièrement, elle améliore la productivité. Deuxièmement, elle facilite la prise de décision. Enfin, elle contribue à une meilleure optimisation des ressources. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "La transformation numérique constitue un enjeu majeur pour les entreprises modernes. Elle permet d’intégrer des technologies performantes et de favoriser une évolution durable des pratiques. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette analyse met en évidence l’importance d’une stratégie structurée permettant d’atteindre les objectifs fixés tout en améliorant continuellement les résultats obtenus. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Grâce à ses capacités avancées, cette technologie représente une opportunité stratégique pour répondre efficacement aux besoins actuels et futurs. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche globale permet non seulement d’améliorer les performances mais également de renforcer la compétitivité dans un environnement fortement concurrentiel. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intégration de solutions intelligentes constitue une évolution incontournable qui offre de nouvelles perspectives et contribue à une meilleure adaptation aux changements. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les résultats démontrent clairement l’impact positif de cette méthode sur l’efficacité organisationnelle et la qualité des services proposés. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "En conclusion, cette réflexion souligne les nombreux bénéfices associés à cette solution et confirme l’importance de poursuivre son développement. Analyse complémentaire numéro 4.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Lors de l’analyse du projet, j’ai remarqué que certaines étapes prévues au départ ont dû être modifiées après les premiers tests. Les résultats étaient corrects mais plusieurs détails techniques demandaient encore des ajustements. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai choisi cette méthode parce qu’elle correspondait mieux aux contraintes rencontrées pendant le travail. Une autre solution était possible, mais elle demandait plus de ressources et apportait peu d’améliorations. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Pendant la réunion, plusieurs points ont été discutés notamment les délais et la répartition des tâches. Finalement, l’équipe a décidé de modifier l’organisation initiale. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le document a été préparé progressivement. Certaines parties ont été réécrites plusieurs fois afin de mieux correspondre aux objectifs fixés. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans mon expérience, ce type d’outil peut être utile, mais il faut toujours vérifier les résultats obtenus avant de les utiliser directement. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les premières observations montrent une amélioration, même si quelques problèmes restent présents. Il faudra probablement effectuer d’autres essais avant de tirer une conclusion définitive. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "J’ai constaté une différence entre ce qui était prévu dans la théorie et ce qui s’est réellement produit lors de l’application. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche fonctionne dans certains cas, mais elle présente aussi des limites liées aux données disponibles. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Le développement de cette fonctionnalité a commencé par une version simple puis plusieurs améliorations ont été ajoutées selon les besoins. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Après comparaison des résultats, j’ai retenu cette option car elle semblait plus adaptée au contexte étudié. Exemple variation 5.",
+    "label": "human",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intelligence artificielle représente aujourd’hui une avancée majeure qui transforme profondément les pratiques dans de nombreux secteurs. Elle offre des opportunités considérables pour améliorer l’efficacité et optimiser les processus. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Dans un contexte en constante évolution, les organisations doivent adopter des solutions innovantes afin de répondre aux nouveaux défis. Cette approche permet d’améliorer significativement les performances globales. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette solution présente plusieurs avantages importants. Premièrement, elle améliore la productivité. Deuxièmement, elle facilite la prise de décision. Enfin, elle contribue à une meilleure optimisation des ressources. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "La transformation numérique constitue un enjeu majeur pour les entreprises modernes. Elle permet d’intégrer des technologies performantes et de favoriser une évolution durable des pratiques. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette analyse met en évidence l’importance d’une stratégie structurée permettant d’atteindre les objectifs fixés tout en améliorant continuellement les résultats obtenus. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Grâce à ses capacités avancées, cette technologie représente une opportunité stratégique pour répondre efficacement aux besoins actuels et futurs. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Cette approche globale permet non seulement d’améliorer les performances mais également de renforcer la compétitivité dans un environnement fortement concurrentiel. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "L’intégration de solutions intelligentes constitue une évolution incontournable qui offre de nouvelles perspectives et contribue à une meilleure adaptation aux changements. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "Les résultats démontrent clairement l’impact positif de cette méthode sur l’efficacité organisationnelle et la qualité des services proposés. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  },
+  {
+    "text": "En conclusion, cette réflexion souligne les nombreux bénéfices associés à cette solution et confirme l’importance de poursuivre son développement. Analyse complémentaire numéro 5.",
+    "label": "ai",
+    "addedAt": "2026-07-01T00:00:00.000Z"
+  }
+]

@@ -3,6 +3,7 @@
  * Source unique de vérité partagée entre le hook UI, le worker et les tests.
  */
 import { splitSentences } from "./utils";
+import { detectHumanization, type HumanizationDetectionResult, type TextClassification } from "./humanizationDetector";
 
 export interface StyleFingerprint {
   sentenceLength: number;
@@ -33,6 +34,10 @@ export interface AIAnalysisResult {
   checklist: ChecklistItem[];
   details: AnalysisDetail[];
   styleFingerprint: StyleFingerprint;
+  /* ── Modules 11-12 : Humanization Detection ── */
+  classification: TextClassification;
+  classificationLabel: string;
+  humanizationDetection: HumanizationDetectionResult | null;
 }
 
 export interface AnalysisDetail {
@@ -1081,6 +1086,9 @@ export function analyzeText(text: string): AIAnalysisResult {
       checklist: [],
       details: [],
       styleFingerprint: emptyFingerprint,
+      classification: "human",
+      classificationLabel: "Texte trop court pour l'analyse",
+      humanizationDetection: null,
     };
   }
 
@@ -1292,6 +1300,9 @@ export function analyzeText(text: string): AIAnalysisResult {
     { label: "Structure naturelle", passed: structureScore < 40 },
   ];
 
+  // ── Modules 11-12 : Humanization Detection ──────────────────
+  const humanizationDetection = detectHumanization(text, score);
+
   return {
     score,
     perplexityScore,
@@ -1312,5 +1323,8 @@ export function analyzeText(text: string): AIAnalysisResult {
     checklist,
     details,
     styleFingerprint,
+    classification: humanizationDetection.classification,
+    classificationLabel: humanizationDetection.classificationLabel,
+    humanizationDetection,
   };
 }

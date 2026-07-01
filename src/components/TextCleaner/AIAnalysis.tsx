@@ -2,8 +2,41 @@ import React from "react";
 import { AIAnalysisResult } from "@/hooks/useAIDetector";
 import { HybridAnalysis, ModelInfo, ModelState } from "@/lib/ml/types";
 import { MLStatus } from "./MLStatus";
-import { AlertTriangle, CheckCircle, XCircle, Bot, Brain, Sparkles, MessageSquare, Gauge, BookOpen, Layers, Wand2, Check, X } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Bot, Brain, Sparkles, MessageSquare, Gauge, BookOpen, Layers, Wand2, Check, X, Shield, Eye, Fingerprint } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+
+/* ── Classification badge ──────────────────────────────── */
+
+const CLASSIFICATION_CONFIG: Record<string, { label: string; color: string; bgColor: string; borderColor: string; icon: React.ReactNode }> = {
+  human: {
+    label: "Humain",
+    color: "text-success",
+    bgColor: "bg-success/10",
+    borderColor: "border-success/30",
+    icon: <CheckCircle className="w-4 h-4 text-success" />,
+  },
+  ai: {
+    label: "IA brute",
+    color: "text-destructive",
+    bgColor: "bg-destructive/10",
+    borderColor: "border-destructive/30",
+    icon: <XCircle className="w-4 h-4 text-destructive" />,
+  },
+  ai_humanized: {
+    label: "IA humanisée",
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+    borderColor: "border-warning/30",
+    icon: <Shield className="w-4 h-4 text-warning" />,
+  },
+  ai_paraphrased: {
+    label: "IA paraphrasée",
+    color: "text-warning",
+    bgColor: "bg-warning/10",
+    borderColor: "border-warning/30",
+    icon: <Eye className="w-4 h-4 text-warning" />,
+  },
+};
 
 interface AIAnalysisProps {
   result: AIAnalysisResult | null;
@@ -113,6 +146,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isAnalyzing, hyb
   }
 
   const { label, color, bgColor, icon } = getScoreLabel(result.score);
+  const cls = CLASSIFICATION_CONFIG[result.classification] || CLASSIFICATION_CONFIG.human;
 
   return (
     <div className="space-y-4 p-6 rounded-lg border border-border bg-card/80 animate-fade-in" role="region" aria-label="Résultats de l'analyse IA" aria-live="polite">
@@ -138,6 +172,52 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isAnalyzing, hyb
           style={{ width: `${result.score}%` }}
         />
       </div>
+
+      {/* Classification badge + humanization probability */}
+      <div className={`flex items-center gap-3 p-3 rounded-md border ${cls.borderColor} ${cls.bgColor}`}>
+        {cls.icon}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className={`text-sm font-semibold ${cls.color}`}>{cls.label}</span>
+            <span className="text-xs text-muted-foreground">—</span>
+            <span className="text-xs text-muted-foreground truncate">{result.classificationLabel}</span>
+          </div>
+          {result.humanizationDetection && (
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              Probabilité d'humanisation : {result.humanizationDetection.humanizationProbability}%
+            </p>
+          )}
+        </div>
+        {result.humanizationDetection && result.humanizationDetection.humanizationProbability > 0 && (
+          <div className="text-right shrink-0">
+            <Fingerprint className="w-4 h-4 text-primary mb-0.5" />
+            <div className="text-xs font-medium">{result.humanizationDetection.humanizationLikelihood}%</div>
+          </div>
+        )}
+      </div>
+
+      {/* Advanced humanization scores (if available) */}
+      {result.humanizationDetection && (
+        <div className="space-y-3 pt-1">
+          <h4 className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+            <Shield className="w-3 h-3" /> Analyse d'humanisation avancée (modules 39-50)
+          </h4>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <ScoreBar label="Variation syntaxique" score={result.humanizationDetection.syntacticVariationScore} icon={<Layers className="w-3 h-3" />} />
+            <ScoreBar label="Diversité lexicale" score={result.humanizationDetection.lexicalDiversityScore} icon={<BookOpen className="w-3 h-3" />} />
+            <ScoreBar label="Rythme phrases" score={result.humanizationDetection.sentenceRhythmScore} icon={<Gauge className="w-3 h-3" />} />
+            <ScoreBar label="Variance paragraphes" score={result.humanizationDetection.paragraphVarianceScore} icon={<Layers className="w-3 h-3" />} />
+            <ScoreBar label="Phrases IA" score={result.humanizationDetection.aiPhraseDensity} icon={<Bot className="w-3 h-3" />} />
+            <ScoreBar label="Surutilisation connecteurs" score={result.humanizationDetection.connectorOveruseScore} icon={<MessageSquare className="w-3 h-3" />} />
+            <ScoreBar label="Préservation sémantique" score={result.humanizationDetection.semanticPreservationScore} icon={<Brain className="w-3 h-3" />} />
+            <ScoreBar label="Variation de ton" score={result.humanizationDetection.toneVariationScore} icon={<Sparkles className="w-3 h-3" />} />
+            <ScoreBar label="Marqueurs perso." score={result.humanizationDetection.personalMarkerScore} icon={<CheckCircle className="w-3 h-3" />} />
+            <ScoreBar label="Nuances humaines" score={result.humanizationDetection.humanNuanceScore} icon={<CheckCircle className="w-3 h-3" />} />
+            <ScoreBar label="Randomisation struct." score={result.humanizationDetection.structureRandomnessScore} icon={<Layers className="w-3 h-3" />} />
+            <ScoreBar label="Probabilité humanis." score={result.humanizationDetection.humanizationLikelihood} icon={<Fingerprint className="w-3 h-3" />} />
+          </div>
+        </div>
+      )}
 
       {/* ML Status */}
       {(modelState || isMLInitializing) && (

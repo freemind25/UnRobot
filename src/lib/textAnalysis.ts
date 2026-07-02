@@ -1142,11 +1142,9 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Transitions", issue: "Connecteurs logiques trop fréquents", severity: "medium", examples: transFound.slice(0, 6) });
   }
 
-  // 4. Perfection (absence d'oralité / familiarités)
-  const informalMarkers = (text.match(/\b(bah|ben|du coup|genre|truc|ouais|franchement|carrément)\b/gi) || []).length;
-  const ellipsis = (text.match(/\.\.\.|…/g) || []).length;
-  const informalDensity = (informalMarkers + ellipsis) / Math.max(1, sentences.length);
-  const perfectionScore = clamp(100 - informalDensity * MULTIPLIERS.perfection);
+  // 4. Perfection (absence d'oralité) — via module Perfection
+  const perfectionResult = runModule("perfection", text, ctx);
+  const perfectionScore = perfectionResult?.score ?? 0;
   if (perfectionScore > 80) {
     details.push({ category: "Perfection", issue: "Style trop lisse, aucune marque d'oralité", severity: "low" });
   }

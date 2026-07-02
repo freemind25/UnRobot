@@ -8,10 +8,10 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import type { StyleFingerprint } from "./textAnalysis";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 const PERSONAL_RE = /\b(je|nous|notre|nos|mon|ma|mes|moi)\b/gi;
 

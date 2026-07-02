@@ -9,9 +9,9 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const entropyModule: AnalysisModule = {
   id: "entropy",

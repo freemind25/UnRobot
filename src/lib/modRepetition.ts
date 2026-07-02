@@ -8,10 +8,10 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { knowledge } from "./knowledge/registry";
 
 const WORD_RE = /\b[\wàâäéèêëîïôöùûüç]+\b/gi;
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 /**
  * Détecte la répétition sémantique entre phrases consécutives.

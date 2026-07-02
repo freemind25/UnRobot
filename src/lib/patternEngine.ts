@@ -52,7 +52,7 @@ export function runPatternEngine(
     patternHits[p.category] = true;
     patternCount += matches.length;
     patternPoints += matches.length * p.points;
-    const examples = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, 5);
+    const examples = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, knowledge.global().maxExamples);
     details.push({
       category: p.category,
       issue: p.issue,

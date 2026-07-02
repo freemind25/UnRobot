@@ -9,9 +9,9 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const paragraphBalanceModule: AnalysisModule = {
   id: "paragraphBalance",
@@ -27,19 +27,20 @@ export const paragraphBalanceModule: AnalysisModule = {
 
     const cfg = knowledge.metric("paragraphBalance");
     const t = cfg.thresholds!;
+    const p = cfg.params!;
 
-    const paraLengths = paragraphs.map((p) => p.trim().split(/\s+/).length);
+    const paraLengths = paragraphs.map((pp) => pp.trim().split(/\s+/).length);
     const avg = paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length;
     const variance = paraLengths.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / paraLengths.length;
     const stdDev = Math.sqrt(variance);
     const cv = avg > 0 ? stdDev / avg : 0;
 
-    // Seuils via LIC
+    // Courbe de scoring via LIC
     let score: number;
-    if (cv < t.cvCritical) score = 90;
-    else if (cv < t.cvWarning) score = 50 + (t.cvWarning - cv) / (t.cvWarning - t.cvCritical) * 30;
-    else if (cv < t.cvNormal) score = 20 + (t.cvNormal - cv) / (t.cvNormal - t.cvWarning) * 20;
-    else score = Math.max(0, 15 - (cv - t.cvNormal) * 20);
+    if (cv < t.cvCritical) score = p.criticalScore;
+    else if (cv < t.cvWarning) score = p.warningBase + (t.cvWarning - cv) / (t.cvWarning - t.cvCritical) * p.warningRange;
+    else if (cv < t.cvNormal) score = p.normalBase + (t.cvNormal - cv) / (t.cvNormal - t.cvWarning) * p.normalRange;
+    else score = Math.max(0, p.naturalBase - (cv - t.cvNormal) * p.naturalSlope);
 
     return {
       score: clamp(score),

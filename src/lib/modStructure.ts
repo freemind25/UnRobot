@@ -11,9 +11,9 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 const ENUMERATION_RE = /\b(premi[eè]rement|deuxi[eè]mement|troisi[eè]mement|ensuite|enfin)\b/gi;
 const GENERIC_HEADERS_RE = /^##\s*(Introduction|Points clés|Avantages|Inconvénients|Défis|Conclusion|Développement|Résumé|Summary|Conclusion)$/gim;

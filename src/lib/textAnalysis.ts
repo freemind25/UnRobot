@@ -1161,11 +1161,11 @@ export function analyzeText(text: string): AIAnalysisResult {
   const perplexityResult = runModule("perplexity", text, ctx);
   const perplexityScore = perplexityResult?.score ?? 0;
 
-  // 7. Profondeur (détails concrets : chiffres, noms propres)
-  const digits = (text.match(/\d/g) || []).length;
-  const properNouns = (text.match(/(?<=\s)[A-ZÀ-Ý][a-zà-ÿ]{2,}/g) || []).length;
-  const concreteDensity = (digits + properNouns) / Math.max(1, words.length);
-  const depthScore = clamp(100 - concreteDensity * MULTIPLIERS.depth);
+  // 7. Profondeur — via module Depth
+  const depthResult = runModule("depth", text, ctx);
+  const depthScore = depthResult?.score ?? 0;
+  const digits = (depthResult?.data?.digitCount as number) ?? 0;
+  const properNouns = (depthResult?.data?.properNounCount as number) ?? 0;
   if (depthScore > 85) {
     details.push({ category: "Profondeur", issue: "Peu de détails concrets (chiffres, noms, exemples)", severity: "low" });
   }

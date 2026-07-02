@@ -913,37 +913,6 @@ function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: 
   return { ratio: sentences.length > 1 ? suspiciousPairs / (sentences.length - 1) : 0, pairs: suspiciousPairs };
 }
 
-// ── MODULE 8 : Score de paraphrase IA ───────────────────────────────
-
-/**
- * Détecte les paraphrases artificielles :
- * synonymes forcés, changements de registre inutiles,
- * phrases plus complexes sans gain d'information.
- */
-function computeParaphraseScore(text: string, sentences: string[]): number {
-  if (sentences.length === 0) return 0;
-
-  // Signaux de paraphrase IA
-  const paraphraseSignals = [
-    // Nominalisations (verbe → nom abstrait)
-    /\b(la mise en œuvre|la mise en place|la prise en charge|la mise en œuvre|la gestion de|le traitement de|l'optimisation de|l'amélioration de)\b/gi,
-    // Verbes faibles + compléments abstraits
-    /\b(contribuer à|permettre de|viser à|tendre à|avoir pour (but|objectif|vocation))\s+(l'|la|le|les|une|un|d'|des)\b/gi,
-    // Formules de reformulation
-    /\b(autrement dit|en d'autres termes|c'est-à-dire|en d'autres mots|pour le dire autrement)\b/gi,
-    // Complexité artificielle : phrases très longues avec peu de contenu concret
-  ];
-
-  let signalCount = 0;
-  for (const sig of paraphraseSignals) {
-    signalCount += (text.match(sig) || []).length;
-  }
-
-  // Ratio par phrase
-  const density = signalCount / sentences.length;
-  return clamp(density * 250);
-}
-
 // ── MODULE 9 : Style Fingerprint ────────────────────────────────────
 
 /**
@@ -1125,8 +1094,9 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Personnalisation", issue: "Peu de marques de personnalisation détectées", severity: "medium" });
   }
 
-  // Module 8 : Paraphrase IA
-  const paraphraseScore = computeParaphraseScore(text, sentences);
+  // Module 8 : Paraphrase IA — via module Paraphrase
+  const paraphraseResult = runModule("paraphrase", text, ctx);
+  const paraphraseScore = paraphraseResult?.score ?? 0;
   if (paraphraseScore > 50) {
     details.push({ category: "Paraphrase IA", issue: "Reformulations artificielles détectées : synonymes forcés ou complexité sans gain d'information", severity: "high" });
   } else if (paraphraseScore > 25) {

@@ -975,48 +975,6 @@ function computeParaphraseScore(text: string, sentences: string[]): number {
   return clamp(density * 250);
 }
 
-// ── MODULE 3 : Score de structure IA ────────────────────────────────
-
-/**
- * Détecte les structures trop parfaites :
- * - Plans rigides (premièrement, deuxièmement...)
- * - Symétrie excessive des paragraphes
- * - Transitions artificielles systématiques
- */
-function computeStructureScore(text: string, sentences: string[]): number {
-  let structPoints = 0;
-
-  // 1. Énumération ordonnée
-  const enumerations = text.match(/\b(premi[eè]rement|deuxi[eè]mement|troisi[eè]mement|ensuite|enfin)\b/gi) || [];
-  structPoints += enumerations.length * 8;
-
-  // 2. Symétrie des paragraphes : variance des longueurs de paragraphes
-  const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
-  if (paragraphs.length >= 3) {
-    const paraLengths = paragraphs.map((p) => p.trim().split(/\s+/).length);
-    const avgPara = paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length;
-    const paraVariance = paraLengths.reduce((a, b) => a + Math.pow(b - avgPara, 2), 0) / paraLengths.length;
-    const paraCV = avgPara > 0 ? Math.sqrt(paraVariance) / avgPara : 0;
-    // Coefficient de variation faible = symétrie excessive
-    if (paraCV < 0.2) structPoints += 15;
-    else if (paraCV < 0.3) structPoints += 8;
-  }
-
-  // 3. Headers génériques (Introduction, Développement, Conclusion)
-  const genericHeaders = text.match(/^##\s*(Introduction|Points clés|Avantages|Inconvénients|Défis|Conclusion|Développement|Résumé|Summary|Conclusion)$/gim) || [];
-  structPoints += genericHeaders.length * 8;
-
-  // 4. Connecteurs en début de phrase (transitions systématiques)
-  const sentencesWithConnector = sentences.filter((s) =>
-    /^\s*(en effet|cependant|de plus|par ailleurs|en outre|par conséquent|néanmoins|toutefois|however|moreover|furthermore|therefore|firstly|secondly|finally|ensuite)/i.test(s.trim())
-  ).length;
-  const connectorStartRatio = sentences.length > 0 ? sentencesWithConnector / sentences.length : 0;
-  if (connectorStartRatio > 0.4) structPoints += 12;
-  else if (connectorStartRatio > 0.25) structPoints += 6;
-
-  return clamp(structPoints);
-}
-
 // ── MODULE 9 : Style Fingerprint ────────────────────────────────────
 
 /**
@@ -1172,8 +1130,9 @@ export function analyzeText(text: string): AIAnalysisResult {
 
   // ── NOUVEAUX MODULES AWPA ──────────────────────────────────────
 
-  // Module 3 : Score de structure IA (STRUCTURE_AI_SCORE)
-  const structureScore = computeStructureScore(text, sentences);
+  // Module 3 : Score de structure IA — via module Structure
+  const structureResult = runModule("structure", text, ctx);
+  const structureScore = structureResult?.score ?? 0;
   if (structureScore > 50) {
     details.push({ category: "Structure IA", issue: "Structure trop parfaite, symétrie excessive ou énumération rigide", severity: "high" });
   } else if (structureScore > 25) {

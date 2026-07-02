@@ -1115,10 +1115,11 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Burstiness", issue: "Longueur de phrases trop uniforme (typique de l'IA)", severity: "high" });
   }
 
-  // 2. Diversité lexicale (TTR)
-  const ttr = (uniqueWords.size / Math.max(1, words.length)) * 100;
-  const vocabularyScore = clamp(100 - ttr);
-  if (ttr < 40) {
+  // 2. Diversité lexicale — via module LexicalRichness
+  const vocabResult = runModule("vocabulary", text, ctx);
+  const vocabularyScore = vocabResult?.score ?? 0;
+  const ttr = (vocabResult?.data?.ttr as number) ?? 0;
+  if (ttr > 0 && ttr < 40) {
     details.push({ category: "Vocabulaire", issue: "Diversité lexicale faible, vocabulaire répétitif", severity: "medium" });
   }
 

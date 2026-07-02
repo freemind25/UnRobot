@@ -105,6 +105,67 @@ export interface PatternEngineConfig {
   staccatoPointsPerHit: number;
 }
 
+/* ── Humanization Detection (#39-#50) ──────────────────────────── */
+
+/** Classification 4 classes du détecteur d'humanisation. */
+export type TextClassification = "human" | "ai" | "ai_humanized" | "ai_paraphrased";
+
+/** Condition de classification. */
+export interface ClassificationCondition {
+  score: string;
+  op: ">" | "<" | ">=" | "<=";
+  value: number;
+}
+
+/** Règle de classification (évaluée en ordre, première correspondance gagne). */
+export interface ClassificationRule {
+  name: string;
+  /** Toutes les conditions doivent correspondre (AND). */
+  conditions: ClassificationCondition[];
+  /** Si présent, au moins une doit correspondre (OR). */
+  confirmConditions?: ClassificationCondition[];
+  classification: TextClassification;
+  label: string;
+}
+
+/** Configuration d'un sous-score d'humanization (#39-#50). */
+export interface HumanizationScoreConfig {
+  minItems: number;
+  thresholds: Record<string, number>;
+  params: Record<string, number>;
+}
+
+/** Configuration de la vraisemblance d'humanisation (#50). */
+export interface LikelihoodConfig {
+  positiveWeights: Record<string, number>;
+  negativeWeights: Record<string, number>;
+  nuanceWeights: Record<string, number>;
+  negativeDampening: number;
+}
+
+/** Listes de mots/patterns pour la détection d'humanisation. */
+export interface HumanizationLists {
+  humanizerConnectors: string[];
+  humanizerPhrases: string[];
+  paraphraseSignals: string[];
+  aiPhrases: string[];
+  formalMarkers: string[];
+  informalMarkers: string[];
+  additionalConnectors: string[];
+  structureConnectors: string[];
+  approximations: string[];
+  temporalMarkers: string[];
+}
+
+/** Configuration complète de la détection d'humanisation. */
+export interface HumanizationKnowledge {
+  minTextLength: number;
+  scores: Record<string, HumanizationScoreConfig>;
+  likelihood: LikelihoodConfig;
+  classificationRules: ClassificationRule[];
+  lists: HumanizationLists;
+}
+
 /** Configuration globale (composite + SUCKS + pattern engine). */
 export interface GlobalConfig {
   /** Points max contribuable par les patterns. */

@@ -16,7 +16,8 @@
 
 import { METRIC_CONFIGS } from "./metrics";
 import { DETAIL_RULES, CHECKLIST_RULES, GLOBAL_CONFIG } from "./evidence";
-import type { MetricConfig, DetailRule, ChecklistRule, GlobalConfig } from "./types";
+import { HUMANIZATION_KNOWLEDGE } from "./humanization";
+import type { MetricConfig, DetailRule, ChecklistRule, GlobalConfig, HumanizationKnowledge, HumanizationScoreConfig } from "./types";
 
 /**
  * API publique du Linguistic Intelligence Core.
@@ -100,5 +101,19 @@ export const knowledge = {
   /** Configuration globale (SUCKS, Pattern Engine, etc.). */
   global(): GlobalConfig {
     return GLOBAL_CONFIG;
+  },
+
+  // ── Humanization Detection ───────────────────────────────────────────
+
+  /** Configuration complète de la détection d'humanisation. */
+  humanization(): HumanizationKnowledge {
+    return HUMANIZATION_KNOWLEDGE;
+  },
+
+  /** Config d'un sous-score d'humanization (#39-#50). */
+  humanScore(id: string): HumanizationScoreConfig {
+    const cfg = HUMANIZATION_KNOWLEDGE.scores[id];
+    if (!cfg) throw new Error(`[LIC] Sous-score humanization inconnu : "${id}"`);
+    return cfg;
   },
 } as const;

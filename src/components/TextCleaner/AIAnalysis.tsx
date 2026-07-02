@@ -271,6 +271,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isAnalyzing, hyb
         <ScoreBar label="Entropie" score={result.entropyScore} icon={<Brain className="w-3 h-3" />} />
         <ScoreBar label="Compression" score={result.compressionRatioScore} icon={<Gauge className="w-3 h-3" />} />
         <ScoreBar label="Zipf R²" score={result.zipfScore} icon={<BookOpen className="w-3 h-3" />} />
+        <ScoreBar label="Voix passive" score={result.passiveVoiceScore} icon={<MessageSquare className="w-3 h-3" />} />
       </div>
 
       {/* Humanization & SUCKS overview */}

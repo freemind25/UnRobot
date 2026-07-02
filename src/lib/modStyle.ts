@@ -4,18 +4,12 @@
  * Crée une empreinte de style multidimensionnelle et un score
  * comparant le texte à un profil LLM typique.
  *
- * LLM typique : sentenceLength ~20, vocabularyDensity ~0.5-0.6,
- * connectorRate élevé, repetitionRate faible, personalMarkers ~0.
- *
- * Score élevé = style proche d'un profil LLM = IA.
- * weight=0.05 — identique au SCORE_WEIGHTS.style existant.
- *
- * Note : les connecteurs sont listés ici (copie locale) pour éviter
- * une dépendance circulaire avec textAnalysis.ts.
+ * Sprint 5 : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
 import type { StyleFingerprint } from "./textAnalysis";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
@@ -43,7 +37,7 @@ function computeTransCount(text: string): number {
 export const styleModule: AnalysisModule = {
   id: "style",
   label: "Style",
-  weight: 0.05,
+  weight: knowledge.weight("style"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { words, sentences, wordFreq } = ctx;
@@ -54,6 +48,10 @@ export const styleModule: AnalysisModule = {
       const emptyFP: StyleFingerprint = { sentenceLength: 0, vocabularyDensity: 0, connectorRate: 0, repetitionRate: 0, complexity: 0, personalMarkers: 0 };
       return { score: 0, data: { fingerprint: JSON.stringify(emptyFP) } };
     }
+
+    const cfg = knowledge.metric("style");
+    const t = cfg.thresholds!;
+    const p = cfg.params!;
 
     // Transition density
     const transCount = computeTransCount(text);
@@ -85,12 +83,12 @@ export const styleModule: AnalysisModule = {
       personalMarkers: Math.round(personalMarkers * 1000) / 1000,
     };
 
-    // Style score : compare le fingerprint à un profil LLM typique
+    // Style score : seuils et points via LIC
     const score = clamp(
-      (fingerprint.sentenceLength > 15 && fingerprint.sentenceLength < 30 ? 30 : 0) +
-      (fingerprint.connectorRate > 0.01 ? 25 : 0) +
-      (fingerprint.personalMarkers < 0.05 ? 25 : 0) +
-      (fingerprint.vocabularyDensity < 0.65 ? 20 : 0)
+      (fingerprint.sentenceLength > t.sentLenMin && fingerprint.sentenceLength < t.sentLenMax ? p.sentLenPoints : 0) +
+      (fingerprint.connectorRate > t.connectorRateMin ? p.connectorPoints : 0) +
+      (fingerprint.personalMarkers < t.personalMarkersMax ? p.personalPoints : 0) +
+      (fingerprint.vocabularyDensity < t.vocabDensityMax ? p.vocabPoints : 0)
     );
 
     return {

@@ -4,12 +4,11 @@
  * Détecte la répétition sémantique entre phrases consécutives
  * via le chevauchement de bigrammes (proxy local, pas d'embeddings).
  *
- * Extrait de textAnalysis.ts : fonction detectSemanticRepetition() (lignes 885-908)
- * et son appel dans analyzeText() (lignes 1197-1202).
- * Produit un résultat identique au semanticRepetitionScore original.
+ * Sprint 5 : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const WORD_RE = /\b[\wàâäéèêëîïôöùûüç]+\b/gi;
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
@@ -19,13 +18,17 @@ const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
  * Retourne un ratio 0-1 et le nombre de paires suspectes.
  */
 function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: number } {
+  const cfg = knowledge.metric("semanticRepetition");
+  const similarityThreshold = cfg.thresholds!.bigramSimilarity;
+  const minWords = cfg.params!.minWordsPerSentence;
+
   if (sentences.length < 2) return { ratio: 0, pairs: 0 };
   let suspiciousPairs = 0;
 
   for (let i = 1; i < sentences.length; i++) {
     const a = (sentences[i - 1].toLowerCase().match(WORD_RE) || []);
     const b = (sentences[i].toLowerCase().match(WORD_RE) || []);
-    if (a.length < 3 || b.length < 3) continue;
+    if (a.length < minWords || b.length < minWords) continue;
 
     const bigramsA = new Set<string>();
     const bigramsB = new Set<string>();
@@ -36,7 +39,7 @@ function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: 
     const union = new Set([...bigramsA, ...bigramsB]).size;
     const similarity = union > 0 ? intersection / union : 0;
 
-    if (similarity > 0.4) suspiciousPairs++;
+    if (similarity > similarityThreshold) suspiciousPairs++;
   }
 
   return { ratio: sentences.length > 1 ? suspiciousPairs / (sentences.length - 1) : 0, pairs: suspiciousPairs };
@@ -45,12 +48,13 @@ function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: 
 export const repetitionModule: AnalysisModule = {
   id: "semanticRepetition",
   label: "Répétition sémantique",
-  weight: 0.05,
+  weight: knowledge.weight("semanticRepetition"),
 
   execute(_text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
     const { ratio, pairs } = detectSemanticRepetition(sentences);
-    const score = clamp(ratio * 500); // MULTIPLIERS.semanticRepetition = 500
+    const multiplier = knowledge.multiplier("semanticRepetition");
+    const score = clamp(ratio * multiplier);
 
     return {
       score,

@@ -5,14 +5,13 @@
  * L'IA surutilise des phrases génériques comme
  * "il est important de", "delve into", etc.
  *
- * Score élevé = beaucoup de formules génériques = signal IA.
- * weight=0.10 — identique au SCORE_WEIGHTS.voice existant.
+ * Sprint 5 : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
-const MULTIPLIER = 350;
 
 const GENERIC_PHRASES = [
   "il est important de", "il convient de", "dans le monde de", "à l'ère du",
@@ -24,11 +23,13 @@ const GENERIC_PHRASES = [
 export const voiceModule: AnalysisModule = {
   id: "voice",
   label: "Voix générique",
-  weight: 0.10,
+  weight: knowledge.weight("voice"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
     if (sentences.length === 0) return { score: 0 };
+
+    const multiplier = knowledge.multiplier("voice");
 
     let genericCount = 0;
     const genericFound: string[] = [];
@@ -41,7 +42,7 @@ export const voiceModule: AnalysisModule = {
       }
     }
 
-    const score = clamp((genericCount / Math.max(1, sentences.length)) * MULTIPLIER);
+    const score = clamp((genericCount / Math.max(1, sentences.length)) * multiplier);
 
     return {
       score,

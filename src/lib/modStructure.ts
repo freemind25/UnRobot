@@ -7,11 +7,11 @@
  * - Transitions artificielles systématiques
  * - Headers génériques (Introduction, Conclusion, etc.)
  *
- * Score élevé = structure trop artificielle = IA.
- * weight=0.10 — identique au SCORE_WEIGHTS.structure existant.
+ * Sprint 5 : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
@@ -22,41 +22,45 @@ const CONNECTOR_START_RE = /^\s*(en effet|cependant|de plus|par ailleurs|en outr
 export const structureModule: AnalysisModule = {
   id: "structure",
   label: "Structure IA",
-  weight: 0.10,
+  weight: knowledge.weight("structure"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
     if (sentences.length === 0) return { score: 0 };
 
+    const cfg = knowledge.metric("structure");
+    const t = cfg.thresholds!;
+    const p = cfg.params!;
+
     let structPoints = 0;
 
     // 1. Énumération ordonnée
     const enumerations = (text.match(ENUMERATION_RE) || []).length;
-    structPoints += enumerations * 8;
+    structPoints += enumerations * p.enumPoints;
 
     // 2. Symétrie des paragraphes
-    const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
+    const paragraphs = text.split(/\n\s*\n/).filter((pp) => pp.trim().length > 0);
     let paraCV = 0;
     if (paragraphs.length >= 3) {
-      const paraLengths = paragraphs.map((p) => p.trim().split(/\s+/).length);
+      const paraLengths = paragraphs.map((pp) => pp.trim().split(/\s+/).length);
       const avgPara = paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length;
       const paraVariance = paraLengths.reduce((a, b) => a + Math.pow(b - avgPara, 2), 0) / paraLengths.length;
       paraCV = avgPara > 0 ? Math.sqrt(paraVariance) / avgPara : 0;
-      if (paraCV < 0.2) structPoints += 15;
-      else if (paraCV < 0.3) structPoints += 8;
+      if (paraCV < t.paraCVLow) structPoints += p.symmetryHighPoints;
+      else if (paraCV < t.paraCVMid) structPoints += p.symmetryMidPoints;
     }
 
     // 3. Headers génériques
     const genericHeaders = (text.match(GENERIC_HEADERS_RE) || []).length;
-    structPoints += genericHeaders * 8;
+    structPoints += genericHeaders * p.headerPoints;
 
     // 4. Connecteurs en début de phrase
     const sentencesWithConnector = sentences.filter((s) =>
       CONNECTOR_START_RE.test(s.trim())
     ).length;
     const connectorStartRatio = sentences.length > 0 ? sentencesWithConnector / sentences.length : 0;
-    if (connectorStartRatio > 0.4) structPoints += 12;
-    else if (connectorStartRatio > 0.25) structPoints += 6;
+    if (connectorStartRatio > t.connectorHigh) structPoints += p.connectorHighPoints;
+    else if (connectorStartRatio > t.connectorMid) structPoints += p.connectorMidPoints;
 
     const score = clamp(structPoints);
 

@@ -10,20 +10,25 @@
  *
  * Sprint 2A : extraction originale (CV inter-phrases uniquement)
  * Sprint 2B : ajout du CV intra-phrase
+ * Sprint 5  : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const sentenceVariationModule: AnalysisModule = {
   id: "burstiness",
   label: "Variation des phrases",
-  weight: 0.15,
+  weight: knowledge.weight("burstiness"),
 
   execute(_text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentenceLengths, sentences } = ctx;
     if (sentenceLengths.length === 0) return { score: 0 };
+
+    const cfg = knowledge.metric("burstiness");
+    const p = cfg.params!;
 
     // ── Signal 1 : Between-sentence CV (original, inchangé) ──
     const avg = sentenceLengths.reduce((a, b) => a + b, 0) / sentenceLengths.length;
@@ -33,14 +38,12 @@ export const sentenceVariationModule: AnalysisModule = {
     const betweenCV = stdDev / Math.max(1, avg);
 
     // ── Signal 2 : Within-sentence CV (nouveau) ──
-    // Pour chaque phrase, calculer le CV des longueurs de mots
-    // Un humain varie les longueurs de mots ; l'IA est plus uniforme
     let totalWithinCV = 0;
     let validSentences = 0;
 
     for (const s of sentences) {
       const wordLengths = s.trim().split(/\s+/).filter(Boolean).map((w) => w.length);
-      if (wordLengths.length < 3) continue;
+      if (wordLengths.length < p.minWordsPerSentence) continue;
 
       const wAvg = wordLengths.reduce((a, b) => a + b, 0) / wordLengths.length;
       if (wAvg === 0) continue;
@@ -50,15 +53,12 @@ export const sentenceVariationModule: AnalysisModule = {
       validSentences++;
     }
 
-    const avgWithinCV = validSentences > 0 ? totalWithinCV / validSentences : 0.5;
+    const avgWithinCV = validSentences > 0 ? totalWithinCV / validSentences : p.fallbackWithinCV;
 
-    // Combinaison : 70% inter-phrases + 30% intra-phrase
-    // Les deux CV faibles = uniformité = IA
-    // betweenCV typical: 0.3-0.8 (human), <0.25 (AI)
-    // withinCV typical: 0.3-0.5 (human), <0.25 (AI)
-    const normalizedBetween = Math.max(0, 1 - betweenCV * 2); // 0-1, low = AI
-    const normalizedWithin = Math.max(0, 1 - avgWithinCV * 2.5); // 0-1, low = AI
-    const combined = normalizedBetween * 0.7 + normalizedWithin * 0.3;
+    // Combinaison : poids via LIC
+    const normalizedBetween = Math.max(0, 1 - betweenCV * p.betweenNorm);
+    const normalizedWithin = Math.max(0, 1 - avgWithinCV * p.withinNorm);
+    const combined = normalizedBetween * p.betweenWeight + normalizedWithin * p.withinWeight;
     const score = clamp(combined * 100);
 
     return {

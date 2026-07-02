@@ -20,6 +20,7 @@ import { transitionDensityModule } from "./modTransitionDensity";
 import { entropyModule } from "./modEntropy";
 import { compressionRatioModule } from "./modCompressionRatio";
 import { zipfModule } from "./modZipf";
+import { passiveVoiceModule } from "./modPassiveVoice";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -35,6 +36,7 @@ export const analysisModules: AnalysisModule[] = [
   entropyModule,
   compressionRatioModule,
   zipfModule,
+  passiveVoiceModule,
 ];
 
 /**

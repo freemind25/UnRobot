@@ -28,6 +28,7 @@ import { depthModule } from "./modDepth";
 import { structureModule } from "./modStructure";
 import { personalizationModule } from "./modPersonalization";
 import { paraphraseModule } from "./modParaphrase";
+import { styleModule } from "./modStyle";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -51,6 +52,7 @@ export const analysisModules: AnalysisModule[] = [
   structureModule,
   personalizationModule,
   paraphraseModule,
+  styleModule,
 ];
 
 /**

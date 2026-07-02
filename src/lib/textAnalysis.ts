@@ -31,6 +31,7 @@ export interface AIAnalysisResult {
   styleScore: number;
   paragraphBalanceScore: number;
   entropyScore: number;
+  compressionRatioScore: number;
   humanizationScore: number;
   sucksScore: number;
   patternCount: number;
@@ -1085,6 +1086,7 @@ export function analyzeText(text: string): AIAnalysisResult {
       styleScore: 0,
       paragraphBalanceScore: 0,
       entropyScore: 0,
+      compressionRatioScore: 0,
       humanizationScore: 100,
       sucksScore: 0,
       patternCount: 0,
@@ -1240,6 +1242,10 @@ export function analyzeText(text: string): AIAnalysisResult {
   const entropyResult = runModule("entropy", text, ctx);
   const entropyScore = entropyResult?.score ?? 0;
 
+  // Sprint 2B — CompressionRatio
+  const compResult = runModule("compressionRatio", text, ctx);
+  const compressionRatioScore = compResult?.score ?? 0;
+
   // 8. Anti-AI Writing Engine : motifs explicites + suggestions de réécriture
   let patternCount = 0;
   let patternPoints = 0;
@@ -1334,6 +1340,7 @@ export function analyzeText(text: string): AIAnalysisResult {
     styleScore,
     paragraphBalanceScore,
     entropyScore,
+    compressionRatioScore,
     humanizationScore,
     sucksScore,
     patternCount,

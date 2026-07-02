@@ -5,7 +5,10 @@
  * Ce fichier est l'orchestrateur : il construit le contexte, appelle les modules,
  * exécute le pattern engine, calcule le score composite + SUCKS,
  * et retourne le résultat complet.
+ *
+ * Sprint 5 PR2 : détails, checklist, SUCKS pilotés par le LIC.
  */
+
 import { splitSentences } from "./utils";
 import { detectHumanization, type HumanizationDetectionResult, type TextClassification } from "./humanizationDetector";
 import { runModule, type AnalysisContext } from "./analysisRegistry";
@@ -13,7 +16,7 @@ import { AI_PATTERNS, type PatternDef } from "./patterns";
 import { AI_PHRASES } from "./aiPhrases";
 import { WEIGHTED_CONNECTORS } from "./connectors";
 import { runPatternEngine } from "./patternEngine";
-import { SCORE_WEIGHTS, SUCKS_CONFIG } from "./coreConfig";
+import { knowledge } from "./knowledge/registry";
 
 // ── Ré-exports pour compatibilité ────────────────────────────────────
 export type { PatternDef } from "./patterns";
@@ -79,11 +82,65 @@ export interface ChecklistItem {
 export type Severity = "low" | "medium" | "high";
 
 /** Longueur minimale (caractères) pour lancer une analyse significative. */
-export const MIN_ANALYSIS_LENGTH = 50;
+export const MIN_ANALYSIS_LENGTH = knowledge.global().minAnalysisLength;
 
 // ── Helpers ───────────────────────────────────────────────────────────
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
+
+/**
+ * Évalue les règles de détails LIC pour une métrique donnée.
+ * Remplace les `if (score > X)` codés en dur.
+ */
+function evaluateDetails(
+  metricId: string,
+  score: number,
+  data?: Record<string, number | string | boolean>,
+): AnalysisDetail[] {
+  const rules = knowledge.details(metricId);
+  const results: AnalysisDetail[] = [];
+  const maxEx = knowledge.global().maxExamples;
+
+  for (const rule of rules) {
+    const ctype = rule.conditionType ?? "score";
+    let triggered = false;
+    let severity = rule.severity;
+    let issue = rule.issue;
+
+    if (ctype === "score") {
+      triggered = score >= rule.minScore;
+    } else if (ctype === "dataBelow") {
+      const val = Number(data?.[rule.conditionField ?? ""] ?? 0);
+      triggered = val > 0 && val < rule.minScore;
+    } else if (ctype === "dataAbove") {
+      const val = Number(data?.[rule.conditionField ?? ""] ?? 0);
+      if (val > 0) {
+        triggered = true;
+        if (rule.highThreshold !== undefined && val > rule.highThreshold) {
+          severity = "high";
+        }
+      }
+    }
+
+    if (!triggered) continue;
+
+    // Issue dynamique pour la répétition sémantique
+    if (!issue && rule.conditionField === "pairs") {
+      const pairs = Number(data?.["pairs"] ?? 0);
+      issue = `${pairs} paire(s) de phrases consécutives avec contenu trop similaire`;
+    }
+
+    const detail: AnalysisDetail = { category: rule.category, issue, severity };
+
+    if (rule.examplesDataKey && data?.[rule.examplesDataKey]) {
+      detail.examples = JSON.parse(String(data[rule.examplesDataKey])).slice(0, rule.maxExamples ?? maxEx);
+    }
+
+    results.push(detail);
+  }
+
+  return results;
+}
 
 // ── Orchestrateur principal ──────────────────────────────────────────
 
@@ -137,62 +194,56 @@ export function analyzeText(text: string): AIAnalysisResult {
   const burstinessResult = runModule("burstiness", text, ctx);
   const burstinessScore = burstinessResult?.score ?? 0;
   const avgLength = (burstinessResult?.data?.avgLength as number) ?? 0;
-  if (burstinessScore > 70) details.push({ category: "Burstiness", issue: "Longueur de phrases trop uniforme (typique de l'IA)", severity: "high" });
+  details.push(...evaluateDetails("burstiness", burstinessScore));
 
   const vocabResult = runModule("vocabulary", text, ctx);
   const vocabularyScore = vocabResult?.score ?? 0;
-  const ttr = (vocabResult?.data?.ttr as number) ?? 0;
-  if (ttr > 0 && ttr < 40) details.push({ category: "Vocabulaire", issue: "Diversité lexicale faible, vocabulaire répétitif", severity: "medium" });
+  details.push(...evaluateDetails("vocabulary", vocabularyScore, vocabResult?.data));
 
   const transResult = runModule("transition", text, ctx);
   const transitionScore = transResult?.score ?? 0;
-  if (transitionScore > 45) {
-    const transFound: string[] = JSON.parse((transResult?.data?.transFoundJson as string) ?? "[]");
-    details.push({ category: "Transitions", issue: "Connecteurs logiques trop fréquents", severity: "medium", examples: transFound.slice(0, 6) });
-  }
+  details.push(...evaluateDetails("transition", transitionScore, transResult?.data));
 
   const perfectionResult = runModule("perfection", text, ctx);
   const perfectionScore = perfectionResult?.score ?? 0;
-  if (perfectionScore > 80) details.push({ category: "Perfection", issue: "Style trop lisse, aucune marque d'oralité", severity: "low" });
+  details.push(...evaluateDetails("perfection", perfectionScore));
 
   const voiceResult = runModule("voice", text, ctx);
   const voiceScore = voiceResult?.score ?? 0;
-  if (voiceScore > 40) {
-    const voiceFound: string[] = JSON.parse((voiceResult?.data?.foundJson as string) ?? "[]");
-    details.push({ category: "Voix générique", issue: "Formulations passe-partout caractéristiques de l'IA", severity: "high", examples: voiceFound.slice(0, 6) });
-  }
+  details.push(...evaluateDetails("voice", voiceScore, voiceResult?.data));
 
-  const perplexityScore = (runModule("perplexity", text, ctx))?.score ?? 0;
+  const perplexityResult = runModule("perplexity", text, ctx);
+  const perplexityScore = perplexityResult?.score ?? 0;
 
   const depthResult = runModule("depth", text, ctx);
   const depthScore = depthResult?.score ?? 0;
   const digits = (depthResult?.data?.digitCount as number) ?? 0;
   const properNouns = (depthResult?.data?.properNounCount as number) ?? 0;
-  if (depthScore > 85) details.push({ category: "Profondeur", issue: "Peu de détails concrets (chiffres, noms, exemples)", severity: "low" });
+  details.push(...evaluateDetails("depth", depthScore));
 
-  const structureScore = (runModule("structure", text, ctx))?.score ?? 0;
-  if (structureScore > 50) details.push({ category: "Structure IA", issue: "Structure trop parfaite, symétrie excessive ou énumération rigide", severity: "high" });
-  else if (structureScore > 25) details.push({ category: "Structure IA", issue: "Certaines marques de structure artificielle détectées", severity: "medium" });
+  const structureResult = runModule("structure", text, ctx);
+  const structureScore = structureResult?.score ?? 0;
+  details.push(...evaluateDetails("structure", structureScore));
 
   const repResult = runModule("semanticRepetition", text, ctx);
   const semanticRepetitionScore = repResult?.score ?? 0;
-  const semRepetitionPairs = (repResult?.data?.pairs as number) ?? 0;
-  if (semRepetitionPairs > 0) details.push({ category: "Répétition sémantique", issue: `${semRepetitionPairs} paire(s) de phrases consécutives avec contenu trop similaire`, severity: semRepetitionPairs > 2 ? "high" : "medium" });
+  details.push(...evaluateDetails("semanticRepetition", semanticRepetitionScore, repResult?.data));
 
-  const personalizationScore = (runModule("personalization", text, ctx))?.score ?? 0;
-  if (personalizationScore > 80) details.push({ category: "Personnalisation", issue: "Absence de marques de personnalisation", severity: "high" });
-  else if (personalizationScore > 60) details.push({ category: "Personnalisation", issue: "Peu de marques de personnalisation détectées", severity: "medium" });
+  const personalizationResult = runModule("personalization", text, ctx);
+  const personalizationScore = personalizationResult?.score ?? 0;
+  details.push(...evaluateDetails("personalization", personalizationScore));
 
-  const paraphraseScore = (runModule("paraphrase", text, ctx))?.score ?? 0;
-  if (paraphraseScore > 50) details.push({ category: "Paraphrase IA", issue: "Reformulations artificielles détectées", severity: "high" });
-  else if (paraphraseScore > 25) details.push({ category: "Paraphrase IA", issue: "Quelques signaux de paraphrase artificielle", severity: "low" });
+  const paraphraseResult = runModule("paraphrase", text, ctx);
+  const paraphraseScore = paraphraseResult?.score ?? 0;
+  details.push(...evaluateDetails("paraphrase", paraphraseScore));
 
   const styleResult = runModule("style", text, ctx);
   const styleScore = styleResult?.score ?? 0;
   const styleFingerprint: StyleFingerprint = JSON.parse((styleResult?.data?.fingerprint as string) ?? "{}");
 
-  const paragraphBalanceScore = (runModule("paragraphBalance", text, ctx))?.score ?? 0;
-  if (paragraphBalanceScore > 60) details.push({ category: "Équilibre paragraphes", issue: "Paragraphes de taille trop uniforme (symétrie suspecte)", severity: paragraphBalanceScore > 80 ? "high" : "medium" });
+  const paragraphBalanceResult = runModule("paragraphBalance", text, ctx);
+  const paragraphBalanceScore = paragraphBalanceResult?.score ?? 0;
+  details.push(...evaluateDetails("paragraphBalance", paragraphBalanceScore));
 
   const entropyScore = (runModule("entropy", text, ctx))?.score ?? 0;
   const compressionRatioScore = (runModule("compressionRatio", text, ctx))?.score ?? 0;
@@ -203,8 +254,8 @@ export function analyzeText(text: string): AIAnalysisResult {
   const { patternCount, patternPoints, patternHits, details: patternDetails } = runPatternEngine(text, sentences);
   details.push(...patternDetails);
 
-  // ── Score composite ───────────────────────────────────────────────
-  const W = SCORE_WEIGHTS;
+  // ── Score composite (poids via LIC) ────────────────────────────────
+  const W = knowledge.compositeWeights();
   const weightedSubScores =
     burstinessScore * W.burstiness +
     transitionScore * W.transition +
@@ -219,30 +270,44 @@ export function analyzeText(text: string): AIAnalysisResult {
     paraphraseScore * W.paraphrase +
     styleScore * W.style;
 
-  const score = clamp(weightedSubScores + Math.min(W.maxPatternPoints, patternPoints));
+  const maxPP = knowledge.global().maxPatternPoints;
+  const score = clamp(weightedSubScores + Math.min(maxPP, patternPoints));
   const humanizationScore = clamp(100 - score);
 
-  // ── Score SUCKS ───────────────────────────────────────────────────
-  const S = SUCKS_CONFIG;
+  // ── Score SUCKS (config via LIC) ───────────────────────────────────
+  const S = knowledge.global().sucks;
   const specific = clamp(100 - depthScore * S.specific.weight + (digits + properNouns > S.specific.threshold ? S.specific.bonus : 0));
-  const unique = clamp(100 - voiceScore * S.unique.weight - (patternHits[S.unique.flag] ? S.unique.penalty : 0));
-  const clear = clamp(100 - transitionScore * S.clear.weight - (patternHits[S.clear.flag] ? S.clear.penalty : 0));
-  const simple = clamp(100 - vocabularyScore * S.simple.weight - (avgLength > S.simple.avgLengthThreshold ? S.simple.penalty : 0));
-  const sticky = clamp(100 - perfectionScore * S.sticky.weight - (patternHits[S.sticky.flag] ? S.sticky.penalty : 0));
+  const unique = clamp(100 - voiceScore * S.unique.weight - (patternHits[S.unique.flag ?? ""] ? S.unique.penalty : 0));
+  const clear = clamp(100 - transitionScore * S.clear.weight - (patternHits[S.clear.flag ?? ""] ? S.clear.penalty : 0));
+  const simple = clamp(100 - vocabularyScore * S.simple.weight - (avgLength > S.simple.avgLengthThreshold! ? S.simple.penalty : 0));
+  const sticky = clamp(100 - perfectionScore * S.sticky.weight - (patternHits[S.sticky.flag ?? ""] ? S.sticky.penalty : 0));
   const sucksScore = clamp((specific + unique + clear + simple + sticky) / 5);
 
-  // ── Checklist ──────────────────────────────────────────────────────
-  const checklist: ChecklistItem[] = [
-    { label: "Aucune construction corrélative", passed: !patternHits["Construction corrélative"] },
-    { label: "Pas de langage hésitant", passed: !patternHits["Langage hésitant"] },
-    { label: "Pas de voix passive", passed: !patternHits["Voix passive"] },
-    { label: "Pas de phrases rhétoriques interdites", passed: !patternHits["Phrases rhétoriques interdites"] },
-    { label: "Score SUCKS > 70", passed: sucksScore > 70 },
-    { label: "Variété de longueur des phrases", passed: burstinessScore < 70 },
-    { label: "Pas de répétition sémantique", passed: semanticRepetitionScore < 30 },
-    { label: "Personnalisation présente", passed: personalizationScore < 70 },
-    { label: "Structure naturelle", passed: structureScore < 40 },
-  ];
+  // ── Checklist (règles via LIC) ──────────────────────────────────────
+  const scoreMap: Record<string, number> = {
+    burstiness: burstinessScore,
+    vocabulary: vocabularyScore,
+    transition: transitionScore,
+    perfection: perfectionScore,
+    voice: voiceScore,
+    perplexity: perplexityScore,
+    depth: depthScore,
+    structure: structureScore,
+    semanticRepetition: semanticRepetitionScore,
+    personalization: personalizationScore,
+    paraphrase: paraphraseScore,
+    style: styleScore,
+    sucks: sucksScore,
+  };
+
+  const checklist: ChecklistItem[] = knowledge.checklist().map((rule) => {
+    if (rule.type === "pattern") {
+      return { label: rule.label, passed: !patternHits[rule.patternFlag ?? ""] };
+    }
+    const val = scoreMap[rule.scoreMetric ?? ""];
+    if (rule.comparison === ">") return { label: rule.label, passed: val > (rule.value ?? 0) };
+    return { label: rule.label, passed: val < (rule.value ?? 0) };
+  });
 
   // ── Humanization Detection ─────────────────────────────────────────
   const humanizationDetection = detectHumanization(text, score);

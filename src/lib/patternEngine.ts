@@ -7,6 +7,7 @@
 
 import type { Severity, AnalysisDetail } from "./textAnalysis";
 import { AI_PATTERNS } from "./patterns";
+import { knowledge } from "./knowledge/registry";
 
 export interface PatternEngineResult {
   patternCount: number;
@@ -15,15 +16,16 @@ export interface PatternEngineResult {
   details: AnalysisDetail[];
 }
 
-/** Détection de phrasé staccato : 3+ phrases consécutives de moins de 5 mots. */
+/** Détection de phrasé staccato (config via LIC). */
 const detectStaccato = (sentences: string[]): number => {
+  const cfg = knowledge.global().patternEngine;
   let run = 0;
   let hits = 0;
   sentences.forEach((s) => {
     const len = s.trim().split(/\s+/).filter(Boolean).length;
-    if (len > 0 && len < 5) {
+    if (len > 0 && len < cfg.staccatoMinWords) {
       run += 1;
-      if (run === 3) hits += 1;
+      if (run === cfg.staccatoRunLength) hits += 1;
     } else {
       run = 0;
     }
@@ -63,7 +65,7 @@ export function runPatternEngine(
   const staccatoHits = detectStaccato(sentences);
   if (staccatoHits > 0) {
     patternCount += staccatoHits;
-    patternPoints += staccatoHits * 5;
+    patternPoints += staccatoHits * knowledge.global().patternEngine.staccatoPointsPerHit;
     patternHits["Phrasé staccato"] = true;
     details.push({
       category: "Phrasé staccato",

@@ -30,13 +30,22 @@ export interface MetricConfig {
   params?: Record<string, number>;
 }
 
+/** Type de condition pour une règle de détail. */
+export type DetailConditionType = "score" | "dataAbove" | "dataBelow";
+
 /** Règle de déclenchement d'un détail dans le rapport. */
 export interface DetailRule {
   /** Identifiant de la métrique concernée. */
   metricId: string;
-  /** Seuil de score minimum pour déclencher. */
+  /** Type de condition (défaut : "score"). */
+  conditionType?: DetailConditionType;
+  /**
+   * Seuil principal.
+   * - conditionType="score" : score >= minScore déclenche
+   * - conditionType="dataBelow" : data[field] < minScore déclenche
+   */
   minScore: number;
-  /** Sévérité du détail. */
+  /** Sévérité du détail (par défaut). */
   severity: "low" | "medium" | "high";
   /** Catégorie affichée dans le rapport. */
   category: string;
@@ -48,13 +57,13 @@ export interface DetailRule {
   examplesDataKey?: string;
   /**
    * Pour les règles basées sur un champ data (pas le score).
-   * Si défini, minScore s'applique à `data[conditionField]` au lieu du score.
+   * Requis quand conditionType != "score".
    */
   conditionField?: string;
   /**
-   * Seuil secondaire pour la sévérité haute.
-   * Si conditionField est défini, sévérité "high" si data[field] > highThreshold,
-   * sinon "medium".
+   * Seuil secondaire pour basculer en sévérité haute.
+   * - "dataAbove" : data[field] > highThreshold → high
+   * - "dataBelow" : inutilisé
    */
   highThreshold?: number;
 }

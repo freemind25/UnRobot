@@ -23,7 +23,9 @@ export const DETAIL_RULES: DetailRule[] = [
   },
   {
     metricId: "vocabulary",
-    minScore: 60,
+    conditionType: "dataBelow",
+    conditionField: "ttr",
+    minScore: 40,
     severity: "medium",
     category: "Vocabulaire",
     issue: "Diversité lexicale faible, vocabulaire répétitif",
@@ -76,11 +78,12 @@ export const DETAIL_RULES: DetailRule[] = [
   },
   {
     metricId: "semanticRepetition",
+    conditionType: "dataAbove",
+    conditionField: "pairs",
     minScore: 0,
     severity: "medium",
     category: "Répétition sémantique",
     issue: "",  // Construit dynamiquement avec le nombre de paires
-    conditionField: "pairs",
     highThreshold: 2,
   },
   {

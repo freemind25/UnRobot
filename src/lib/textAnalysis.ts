@@ -101,8 +101,6 @@ const SUCKS_CONFIG = {
   sticky:     { weight: 0.5, penalty: 20, flag: "Phrases rhétoriques interdites" as const, field: "perfection" as const },
 } as const;
 
-];
-
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 // Détection de phrasé staccato : 3+ phrases consécutives de moins de 5 mots.
@@ -120,40 +118,6 @@ const detectStaccato = (sentences: string[]): number => {
   });
   return hits;
 };
-];
-
-// ── MODULE 6 : Répétition sémantique (n-gram overlap proxy) ────────
-
-/**
- * Détecte la répétition sémantique entre phrases consécutives.
- * Utilise le chevauchement de bigrammes comme proxy local (pas d'embeddings).
- * Retourne un ratio 0-1 et les paires suspectes.
- */
-function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: number } {
-  if (sentences.length < 2) return { ratio: 0, pairs: 0 };
-  const WORD_RE = /\b[\wàâäéèêëîïôöùûüç]+\b/gi;
-  let suspiciousPairs = 0;
-
-  for (let i = 1; i < sentences.length; i++) {
-    const a = (sentences[i - 1].toLowerCase().match(WORD_RE) || []);
-    const b = (sentences[i].toLowerCase().match(WORD_RE) || []);
-    if (a.length < 3 || b.length < 3) continue;
-
-    const bigramsA = new Set<string>();
-    const bigramsB = new Set<string>();
-    for (let j = 0; j < a.length - 1; j++) bigramsA.add(`${a[j]}|${a[j + 1]}`);
-    for (let j = 0; j < b.length - 1; j++) bigramsB.add(`${b[j]}|${b[j + 1]}`);
-
-    const intersection = [...bigramsA].filter((bg) => bigramsB.has(bg)).length;
-    const union = new Set([...bigramsA, ...bigramsB]).size;
-    const similarity = union > 0 ? intersection / union : 0;
-
-    // Seuil : si deux phrases consécutives partagent >40% de bigrammes
-    if (similarity > 0.4) suspiciousPairs++;
-  }
-
-  return { ratio: sentences.length > 1 ? suspiciousPairs / (sentences.length - 1) : 0, pairs: suspiciousPairs };
-}
 
 /** Analyse complète d'un texte. Pure, déterministe (hors aléatoire : aucun). */
 export function analyzeText(text: string): AIAnalysisResult {

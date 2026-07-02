@@ -133,6 +133,7 @@ export function downloadReportPDF(data: ReportData) {
     barHtml("Personnalisation", a.personalizationScore),
     barHtml("Paraphrase IA", a.paraphraseScore),
     barHtml("Style", a.styleScore),
+    barHtml("Équilibre §", a.paragraphBalanceScore),
   ] : [];
 
   // Radar chart

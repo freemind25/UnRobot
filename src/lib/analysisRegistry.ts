@@ -15,6 +15,7 @@ export type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./An
 import { sentenceVariationModule } from "./modSentenceVariation";
 import { lexicalRichnessModule } from "./modLexicalRichness";
 import { repetitionModule } from "./modRepetition";
+import { paragraphBalanceModule } from "./modParagraphBalance";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -25,7 +26,7 @@ export const analysisModules: AnalysisModule[] = [
   sentenceVariationModule,
   lexicalRichnessModule,
   repetitionModule,
-  // PR5: ParagraphBalance (paragraphBalance)
+  paragraphBalanceModule,
   // PR6: TransitionDensity (transition)
 ];
 

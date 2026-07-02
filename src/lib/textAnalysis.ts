@@ -93,18 +93,6 @@ const SCORE_WEIGHTS = {
   maxPatternPoints: 30,
 } as const;
 
-/** Multiplicateurs de normalisation pour chaque sous-score. */
-const MULTIPLIERS = {
-  transition: 600,
-  perfection: 220,
-  voice: 350,
-  perplexity: 1.8,
-  depth: 900,
- structure: 800,
-  semanticRepetition: 500,
-  personalization: 300,
-  paraphrase: 400,
-} as const;
 
 /** Pondérations et seuils du score SUCKS. */
 const SUCKS_CONFIG = {
@@ -913,57 +901,6 @@ function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: 
   return { ratio: sentences.length > 1 ? suspiciousPairs / (sentences.length - 1) : 0, pairs: suspiciousPairs };
 }
 
-// ── MODULE 9 : Style Fingerprint ────────────────────────────────────
-
-/**
- * Crée une empreinte de style multidimensionnelle.
- * Permet de comparer le style du texte analysé à des profils humains vs LLM.
- */
-function computeStyleFingerprint(
-  text: string,
-  sentences: string[],
-  words: string[],
-  transitionDensity: number,
-): StyleFingerprint {
-  const wc = words.length;
-  const sc = sentences.length;
-
-  // sentenceLength : longueur moyenne des phrases
-  const avgSentLen = sc > 0 ? words.length / sc : 0;
-
-  // vocabularyDensity : TTR (type-token ratio)
-  const uniqueWords = new Set(words.map((w) => w.toLowerCase()));
-  const ttr = wc > 0 ? uniqueWords.size / wc : 0;
-
-  // connectorRate : densité de connecteurs
-  const connectorRate = transitionDensity;
-
-  // repetitionRate : ratio de mots hapax (qui n'apparaissent qu'une fois)
-  const freq = new Map<string, number>();
-  words.forEach((w) => {
-    const lw = w.toLowerCase();
-    freq.set(lw, (freq.get(lw) || 0) + 1);
-  });
-  const hapaxCount = [...freq.values()].filter((v) => v === 1).length;
-  const repetitionRate = wc > 0 ? 1 - hapaxCount / wc : 0;
-
-  // complexity : longueur moyenne des mots
-  const avgWordLen = wc > 0 ? words.reduce((s, w) => s + w.length, 0) / wc : 0;
-
-  // personalMarkers : présence de marques personnelles (je, nous, notre, mon, ma)
-  const personalPronouns = (text.match(/\b(je|nous|notre|nos|mon|ma|mes|moi)\b/gi) || []).length;
-  const personalMarkers = sc > 0 ? personalPronouns / sc : 0;
-
-  return {
-    sentenceLength: Math.round(avgSentLen * 10) / 10,
-    vocabularyDensity: Math.round(ttr * 1000) / 1000,
-    connectorRate: Math.round(connectorRate * 1000) / 1000,
-    repetitionRate: Math.round(repetitionRate * 1000) / 1000,
-    complexity: Math.round(avgWordLen * 10) / 10,
-    personalMarkers: Math.round(personalMarkers * 1000) / 1000,
-  };
-}
-
 /** Analyse complète d'un texte. Pure, déterministe (hors aléatoire : aucun). */
 export function analyzeText(text: string): AIAnalysisResult {
   if (!text || text.length < MIN_ANALYSIS_LENGTH) {
@@ -1032,7 +969,6 @@ export function analyzeText(text: string): AIAnalysisResult {
   // 3. Transitions mécaniques — via module TransitionDensity
   const transResult = runModule("transition", text, ctx);
   const transitionScore = transResult?.score ?? 0;
-  const transCount = (transResult?.data?.transCount as number) ?? 0;
   if (transitionScore > 45) {
     const transFound: string[] = JSON.parse((transResult?.data?.transFoundJson as string) ?? "[]");
     details.push({ category: "Transitions", issue: "Connecteurs logiques trop fréquents", severity: "medium", examples: transFound.slice(0, 6) });
@@ -1103,9 +1039,10 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Paraphrase IA", issue: "Quelques signaux de paraphrase artificielle", severity: "low" });
   }
 
-  // Module 9 : Style Fingerprint + Style Score
-  const transDensity = words.length > 0 ? transCount / words.length : 0;
-  const styleFingerprint = computeStyleFingerprint(text, sentences, words, transDensity);
+  // Module 9 : Style Fingerprint + Style Score — via module Style
+  const styleResult = runModule("style", text, ctx);
+  const styleScore = styleResult?.score ?? 0;
+  const styleFingerprint: StyleFingerprint = JSON.parse((styleResult?.data?.fingerprint as string) ?? "{}");
 
   // ParagraphBalance — via module (NOUVEAU score, ne participe pas au score composite)
   const paraBalResult = runModule("paragraphBalance", text, ctx);
@@ -1113,15 +1050,6 @@ export function analyzeText(text: string): AIAnalysisResult {
   if (paragraphBalanceScore > 60) {
     details.push({ category: "Équilibre paragraphes", issue: "Paragraphes de taille trop uniforme (symétrie suspecte)", severity: paragraphBalanceScore > 80 ? "high" : "medium" });
   }
-
-  // Style score : compare le fingerprint à un profil LLM typique
-  // LLM : sentenceLength ~20, vocabularyDensity ~0.5-0.6, connectorRate élevé, repetitionRate faible, personalMarkers ~0
-  const styleScore = clamp(
-    (styleFingerprint.sentenceLength > 15 && styleFingerprint.sentenceLength < 30 ? 30 : 0) +
-    (styleFingerprint.connectorRate > 0.01 ? 25 : 0) +
-    (styleFingerprint.personalMarkers < 0.05 ? 25 : 0) +
-    (styleFingerprint.vocabularyDensity < 0.65 ? 20 : 0)
-  );
 
   // Sprint 2B — Entropy
   const entropyResult = runModule("entropy", text, ctx);

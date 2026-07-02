@@ -17,6 +17,7 @@ import { lexicalRichnessModule } from "./modLexicalRichness";
 import { repetitionModule } from "./modRepetition";
 import { paragraphBalanceModule } from "./modParagraphBalance";
 import { transitionDensityModule } from "./modTransitionDensity";
+import { entropyModule } from "./modEntropy";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -29,6 +30,7 @@ export const analysisModules: AnalysisModule[] = [
   repetitionModule,
   paragraphBalanceModule,
   transitionDensityModule,
+  entropyModule,
 ];
 
 /**

@@ -268,6 +268,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ result, isAnalyzing, hyb
         <ScoreBar label="Paraphrase IA" score={result.paraphraseScore} icon={<Bot className="w-3 h-3" />} />
         <ScoreBar label="Style" score={result.styleScore} icon={<Sparkles className="w-3 h-3" />} />
         <ScoreBar label="Équilibre §" score={result.paragraphBalanceScore} icon={<Layers className="w-3 h-3" />} />
+        <ScoreBar label="Entropie" score={result.entropyScore} icon={<Brain className="w-3 h-3" />} />
       </div>
 
       {/* Humanization & SUCKS overview */}

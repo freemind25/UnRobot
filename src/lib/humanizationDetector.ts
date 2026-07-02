@@ -7,10 +7,9 @@
  * 12 scores avancés (modules 39-50 AWPA) + classification 4 classes.
  */
 import { splitSentences } from "./utils";
-
-/* ── Types ──────────────────────────────────────────────────── */
-
-export type TextClassification = "human" | "ai" | "ai_humanized" | "ai_paraphrased";
+import { knowledge } from "./knowledge/registry";
+import type { TextClassification } from "./knowledge/types";
+export type { TextClassification };
 
 export interface HumanizationDetectionResult {
   /** Score de probabilité que le texte ait été humanisé (0-100) */

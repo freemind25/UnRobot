@@ -1157,14 +1157,9 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Voix générique", issue: "Formulations passe-partout caractéristiques de l'IA", severity: "high", examples: voiceFound.slice(0, 6) });
   }
 
-  // 6. Perplexité approximée (prévisibilité)
-  const commonWords = new Set([
-    "le", "la", "les", "de", "des", "un", "une", "et", "à", "en", "que", "qui",
-    "dans", "pour", "est", "ce", "il", "elle", "the", "of", "and", "to", "in", "is", "a",
-  ]);
-  const commonCount = words.filter((w) => commonWords.has(w)).length;
-  const commonRatio = (commonCount / Math.max(1, words.length)) * 100;
-  const perplexityScore = clamp(commonRatio * MULTIPLIERS.perplexity);
+  // 6. Perplexité — via module Perplexity
+  const perplexityResult = runModule("perplexity", text, ctx);
+  const perplexityScore = perplexityResult?.score ?? 0;
 
   // 7. Profondeur (détails concrets : chiffres, noms propres)
   const digits = (text.match(/\d/g) || []).length;

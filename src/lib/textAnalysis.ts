@@ -6,8 +6,12 @@ import { splitSentences } from "./utils";
 import { detectHumanization, type HumanizationDetectionResult, type TextClassification } from "./humanizationDetector";
 import { runModule, type AnalysisContext } from "./analysisRegistry";
 import { AI_PATTERNS, type PatternDef } from "./patterns";
+import { AI_PHRASES } from "./aiPhrases";
+import { WEIGHTED_CONNECTORS } from "./connectors";
 
 export type { PatternDef } from "./patterns";
+export { AI_PHRASES } from "./aiPhrases";
+export { WEIGHTED_CONNECTORS } from "./connectors";
 
 export interface StyleFingerprint {
   sentenceLength: number;
@@ -116,74 +120,6 @@ const detectStaccato = (sentences: string[]): number => {
   });
   return hits;
 };
-
-// ── MODULE 3 : Dictionnaire AI_PHRASES (Module 5 étendu) ────────────
-
-/** Phrases génériques typiques de l'IA, avec poids de risque. */
-export const AI_PHRASES: Array<{ phrase: string; weight: number }> = [
-  // Fort risque
-  { phrase: "en outre", weight: 3 },
-  { phrase: "de plus", weight: 2 },
-  { phrase: "par ailleurs", weight: 3 },
-  { phrase: "en conclusion", weight: 3 },
-  { phrase: "il convient de noter", weight: 3 },
-  { phrase: "cette approche permet", weight: 3 },
-  { phrase: "approche innovante", weight: 3 },
-  { phrase: "solution pertinente", weight: 3 },
-  { phrase: "enjeux majeurs", weight: 3 },
-  { phrase: "impact significatif", weight: 3 },
-  { phrase: "contexte en constante évolution", weight: 3 },
-  { phrase: "perspectives prometteuses", weight: 3 },
-  // Moyen risque
-  { phrase: "il est important de", weight: 2 },
-  { phrase: "il est essentiel de", weight: 2 },
-  { phrase: "dans le monde actuel", weight: 2 },
-  { phrase: "à l'ère du", weight: 2 },
-  { phrase: "force est de constater", weight: 2 },
-  { phrase: "pour conclure", weight: 2 },
-  { phrase: "avancée majeure", weight: 2 },
-  { phrase: "potentiel considérable", weight: 2 },
-  { phrase: "défis majeurs", weight: 2 },
-  { phrase: "progrès significatifs", weight: 2 },
-  { phrase: "in today's world", weight: 2 },
-  { phrase: "it is important to", weight: 2 },
-  { phrase: "plays a crucial role", weight: 2 },
-  { phrase: "delve into", weight: 3 },
-  { phrase: "a testament to", weight: 2 },
-  { phrase: "in conclusion", weight: 3 },
-  { phrase: "however", weight: 1 },
-  { phrase: "moreover", weight: 1 },
-  { phrase: "furthermore", weight: 1 },
-  { phrase: "therefore", weight: 1 },
-  { phrase: "consequently", weight: 1 },
-];
-
-// ── MODULE 4 : Connecteurs pondérés ─────────────────────────────────
-
-/** Connecteurs logiques avec poids de risque IA. */
-export const WEIGHTED_CONNECTORS: Array<{ connector: string; weight: number }> = [
-  // Fort risque
-  { connector: "en outre", weight: 3 },
-  { connector: "il convient de noter que", weight: 3 },
-  { connector: "cette approche permet de", weight: 3 },
-  { connector: "il est important de souligner", weight: 2 },
-  { connector: "par conséquent", weight: 2 },
-  // Risque moyen
-  { connector: "en effet", weight: 1 },
-  { connector: "cependant", weight: 1 },
-  { connector: "de plus", weight: 2 },
-  { connector: "par ailleurs", weight: 2 },
-  { connector: "néanmoins", weight: 1 },
-  { connector: "toutefois", weight: 1 },
-  { connector: "de surcroît", weight: 2 },
-  { connector: "en conclusion", weight: 3 },
-  // EN
-  { connector: "however", weight: 1 },
-  { connector: "moreover", weight: 1 },
-  { connector: "furthermore", weight: 1 },
-  { connector: "therefore", weight: 1 },
-  { connector: "consequently", weight: 1 },
-  { connector: "in conclusion", weight: 3 },
 ];
 
 // ── MODULE 6 : Répétition sémantique (n-gram overlap proxy) ────────

@@ -1,14 +1,12 @@
 /**
  * Module Personalization (AWPA — Personnalisation)
  *
- * Mesure la présence de marques de personnalisation :
- * exemples précis, contexte, expérience, références concrètes.
- *
- * Score élevé = peu de personnalisation = IA.
- * weight=0.05 — identique au SCORE_WEIGHTS.personalization existant.
+ * Mesure la présence de marques de personnalisation.
+ * Sprint 5 : weight + multiplier → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
@@ -28,11 +26,13 @@ const MARKERS = [
 export const personalizationModule: AnalysisModule = {
   id: "personalization",
   label: "Personnalisation",
-  weight: 0.05,
+  weight: knowledge.weight("personalization"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
     if (sentences.length === 0) return { score: 0 };
+
+    const multiplier = knowledge.multiplier("personalization");
 
     let totalHits = 0;
     for (const marker of MARKERS) {
@@ -41,7 +41,7 @@ export const personalizationModule: AnalysisModule = {
 
     const density = sentences.length > 0 ? totalHits / sentences.length : 0;
     // Score inversé : peu de personnalisation = score IA élevé
-    const score = clamp(100 - density * 25);
+    const score = clamp(100 - density * multiplier);
 
     return {
       score,

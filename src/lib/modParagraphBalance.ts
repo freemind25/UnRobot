@@ -5,20 +5,18 @@
  * L'IA tend à produire des paragraphes de taille très uniforme,
  * tandis qu'un humain varie naturellement la longueur.
  *
- * NOUVEAU score — n'existait pas comme métrique autonome.
- * La logique de symétrie était partiellement dans computeStructureScore()
- * (lignes 987-997 de textAnalysis.ts) mais contribuant au structureScore global.
- * Ce module en fait une métrique dédiée avec son propre poids.
+ * Sprint 5 : thresholds → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const paragraphBalanceModule: AnalysisModule = {
   id: "paragraphBalance",
   label: "Équilibre des paragraphes",
-  weight: 0.0, // Nouveau score — ne participe pas au score composite initial
+  weight: knowledge.weight("paragraphBalance"),
 
   execute(text: string, _ctx: AnalysisContext): AnalysisModuleResult {
     const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
@@ -27,22 +25,21 @@ export const paragraphBalanceModule: AnalysisModule = {
       return { score: 0, data: { paragraphCount: 0, cv: 0 } };
     }
 
+    const cfg = knowledge.metric("paragraphBalance");
+    const t = cfg.thresholds!;
+
     const paraLengths = paragraphs.map((p) => p.trim().split(/\s+/).length);
     const avg = paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length;
     const variance = paraLengths.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / paraLengths.length;
     const stdDev = Math.sqrt(variance);
-    const cv = avg > 0 ? stdDev / avg : 0; // Coefficient de variation
+    const cv = avg > 0 ? stdDev / avg : 0;
 
-    // CV faible = paragraphes trop uniformes = signal IA
-    // CV < 0.15 : très suspect → score 90
-    // CV 0.15-0.25 : suspect → score 50-80
-    // CV 0.25-0.40 : normal → score 20-40
-    // CV > 0.40 : naturel → score 0-15
+    // Seuils via LIC
     let score: number;
-    if (cv < 0.15) score = 90;
-    else if (cv < 0.25) score = 50 + (0.25 - cv) / 0.10 * 30;
-    else if (cv < 0.40) score = 20 + (0.40 - cv) / 0.15 * 20;
-    else score = Math.max(0, 15 - (cv - 0.40) * 20);
+    if (cv < t.cvCritical) score = 90;
+    else if (cv < t.cvWarning) score = 50 + (t.cvWarning - cv) / (t.cvWarning - t.cvCritical) * 30;
+    else if (cv < t.cvNormal) score = 20 + (t.cvNormal - cv) / (t.cvNormal - t.cvWarning) * 20;
+    else score = Math.max(0, 15 - (cv - t.cvNormal) * 20);
 
     return {
       score: clamp(score),

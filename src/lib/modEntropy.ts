@@ -5,27 +5,24 @@
  * H = -Σ p(w) × log2(p(w))
  * Normalisée : H_norm = H / log2(V) où V = taille du vocabulaire
  *
- * Un texte IA a une entropie normalisée plus FAIBLE car les mots
- * sont plus prévisibles (distribution plus "plate" et conventionnelle).
- * Un humain a une entropie normalisée plus ÉLEVÉE car il utilise
- * des mots rares, des néologismes, et des choix inhabituels.
- *
- * Score IA = 100 - (H_norm × 100)
- * Donc : faible entropie → score élevé → signal IA
+ * Sprint 5 : minWords/minUniqueWords → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const entropyModule: AnalysisModule = {
   id: "entropy",
   label: "Entropie lexicale",
-  weight: 0.0, // Observational — ne participe pas au score composite
+  weight: knowledge.weight("entropy"),
 
   execute(_text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { words, wordFreq, uniqueWords } = ctx;
-    if (words.length < 10 || uniqueWords.size < 5) {
+    const cfg = knowledge.metric("entropy");
+
+    if (words.length < (cfg.minWords ?? 0) || uniqueWords.size < (cfg.minUniqueWords ?? 0)) {
       return { score: 0, data: { rawEntropy: 0, normalizedEntropy: 0 } };
     }
 

@@ -2,21 +2,16 @@
  * Module PassiveVoice (AWPA — Voix passive)
  *
  * Détecte les constructions à la voix passive en FR et EN.
- * L'IA surutilise la voix passive (ton impersonnel, formel).
- *
- * FR : "est/été/sont/sera/seraient + participe passé"
- * EN : "is/are/was/were/been/being + past participle"
- *
- * Utilise FunctionWordAnalyzer pour les auxiliaires.
+ * Sprint 5 : minWords + multiplier + proximityWindow → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 // ── Patterns de voix passive ──────────────────────────────────────
 
-// FR : auxiliaire + participe passé (mots se terminant par -é, -ée, -és, -ées, -i, -ie, -is, -it, -u, -ue, -us)
 const FR_AUXILIARIES = /\b(est|était|sera|serait|sont|étaient|seront|seraient|a été|ont été|avait été|auront été|aient été)\b/gi;
 const FR_PARTICIPLE = /\b\w+(é|ée|és|ées|is|it|ie|ies|u|ue|us|ues)\b/gi;
 
@@ -24,7 +19,7 @@ const FR_PARTICIPLE = /\b\w+(é|ée|és|ées|is|it|ie|ies|u|ue|us|ues)\b/gi;
 const EN_AUXILIARIES = /\b(is|are|was|were|be|been|being|has been|have been|had been)\b/gi;
 const EN_PARTICIPLE = /\b\w+(ed|en|t|wn)\b/gi;
 
-function detectPassive(text: string, lang: "fr" | "en"): { count: number; density: number } {
+function detectPassive(text: string, lang: "fr" | "en", proximityWindow: number): { count: number; density: number } {
   let auxMatches: string[] = [];
   let partMatches: string[] = [];
   let auxPattern: RegExp;
@@ -42,7 +37,7 @@ function detectPassive(text: string, lang: "fr" | "en"): { count: number; densit
     partPattern = EN_PARTICIPLE;
   }
 
-  // Vérifier la proximité : auxiliaire suivi d'un participe dans les 5 mots suivants
+  // Vérifier la proximité : auxiliaire suivi d'un participe dans les N mots suivants
   let count = 0;
   const WORD_RE = /\b[\wàâäéèêëîïôöùûüç]+\b/gi;
   const allWords = [...text.matchAll(WORD_RE)].map((m) => ({
@@ -52,11 +47,10 @@ function detectPassive(text: string, lang: "fr" | "en"): { count: number; densit
 
   for (const auxMatch of auxMatches) {
     const auxIndex = text.indexOf(auxMatch, 0);
-    // Chercher un participe dans les 5 mots suivants
     const auxWordIdx = allWords.findIndex((w) => w.index >= auxIndex);
     if (auxWordIdx === -1) continue;
 
-    for (let i = auxWordIdx + 1; i <= Math.min(auxWordIdx + 5, allWords.length - 1); i++) {
+    for (let i = auxWordIdx + 1; i <= Math.min(auxWordIdx + proximityWindow, allWords.length - 1); i++) {
       const w = allWords[i].word.toLowerCase();
       if (lang === "fr") {
         if (/(é|ée|és|ées|is|it|ie|ies|u|ue|us|ues)$/.test(w)) {
@@ -98,22 +92,22 @@ function quickLangDetect(words: string[]): "fr" | "en" {
 export const passiveVoiceModule: AnalysisModule = {
   id: "passiveVoice",
   label: "Voix passive",
-  weight: 0.0, // Observationnel
+  weight: knowledge.weight("passiveVoice"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { words } = ctx;
-    if (words.length < 15) {
+    const cfg = knowledge.metric("passiveVoice");
+
+    if (words.length < (cfg.minWords ?? 0)) {
       return { score: 0, data: { count: 0, density: 0 } };
     }
 
     const lang = quickLangDetect(words);
-    const { count, density } = detectPassive(text, lang);
+    const proximityWindow = cfg.params!.proximityWindow;
+    const multiplier = knowledge.multiplier("passiveVoice");
+    const { count, density } = detectPassive(text, lang, proximityWindow);
 
-    // Score : densité de passive par phrase
-    // < 0.1 : rare → score bas (humain)
-    // 0.1-0.2 : normal → score moyen
-    // > 0.2 : fréquent → score élevé (IA)
-    const score = clamp(density * 300);
+    const score = clamp(density * multiplier);
 
     return {
       score,

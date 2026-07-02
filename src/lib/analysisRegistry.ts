@@ -13,6 +13,7 @@ import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./An
 export type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
 
 import { sentenceVariationModule } from "./modSentenceVariation";
+import { lexicalRichnessModule } from "./modLexicalRichness";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -21,7 +22,7 @@ import { sentenceVariationModule } from "./modSentenceVariation";
  */
 export const analysisModules: AnalysisModule[] = [
   sentenceVariationModule,
-  // PR3: LexicalRichness (vocabulary)
+  lexicalRichnessModule,
   // PR4: Repetition (semanticRepetition)
   // PR5: ParagraphBalance (paragraphBalance)
   // PR6: TransitionDensity (transition)

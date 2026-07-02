@@ -5,11 +5,11 @@
  * synonymes forcés, changements de registre inutiles,
  * phrases plus complexes sans gain d'information.
  *
- * Score élevé = paraphrase artificielle détectée = IA.
- * weight=0.05 — identique au SCORE_WEIGHTS.paraphrase existant.
+ * Sprint 5 : magic numbers → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
@@ -25,11 +25,13 @@ const PARAPHRASE_SIGNALS = [
 export const paraphraseModule: AnalysisModule = {
   id: "paraphrase",
   label: "Paraphrase IA",
-  weight: 0.05,
+  weight: knowledge.weight("paraphrase"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
     if (sentences.length === 0) return { score: 0 };
+
+    const multiplier = knowledge.multiplier("paraphrase");
 
     let signalCount = 0;
     for (const sig of PARAPHRASE_SIGNALS) {
@@ -37,7 +39,7 @@ export const paraphraseModule: AnalysisModule = {
     }
 
     const density = signalCount / sentences.length;
-    const score = clamp(density * 250);
+    const score = clamp(density * multiplier);
 
     return {
       score,

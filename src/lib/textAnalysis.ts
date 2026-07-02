@@ -1197,9 +1197,10 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Structure IA", issue: "Certaines marques de structure artificielle détectées", severity: "medium" });
   }
 
-  // Module 6 : Répétition sémantique
-  const { ratio: semRepetitionRatio, pairs: semRepetitionPairs } = detectSemanticRepetition(sentences);
-  const semanticRepetitionScore = clamp(semRepetitionRatio * MULTIPLIERS.semanticRepetition);
+  // Module 6 : Répétition sémantique — via module Repetition
+  const repResult = runModule("semanticRepetition", text, ctx);
+  const semanticRepetitionScore = repResult?.score ?? 0;
+  const semRepetitionPairs = (repResult?.data?.pairs as number) ?? 0;
   if (semRepetitionPairs > 0) {
     details.push({ category: "Répétition sémantique", issue: `${semRepetitionPairs} paire(s) de phrases consécutives avec contenu trop similaire (REPETITION_AI_PATTERN)`, severity: semRepetitionPairs > 2 ? "high" : "medium" });
   }

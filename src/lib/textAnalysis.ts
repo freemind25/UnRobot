@@ -1149,23 +1149,12 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Perfection", issue: "Style trop lisse, aucune marque d'oralité", severity: "low" });
   }
 
-  // 5. Voix générique (formules passe-partout des LLM)
-  const genericPhrases = [
-    "il est important de", "il convient de", "dans le monde de", "à l'ère du",
-    "en conclusion", "pour conclure", "force est de constater", "il est essentiel",
-    "in today's world", "it is important to", "plays a crucial role", "in conclusion",
-    "delve into", "a testament to",
-  ];
-  let genericCount = 0;
-  const genericFound: string[] = [];
-  genericPhrases.forEach((p) => {
-    const m = text.match(new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi")) || [];
-    if (m.length) genericFound.push(p);
-    genericCount += m.length;
-  });
-  const voiceScore = clamp((genericCount / Math.max(1, sentences.length)) * MULTIPLIERS.voice);
+  // 5. Voix générique — via module Voice
+  const voiceResult = runModule("voice", text, ctx);
+  const voiceScore = voiceResult?.score ?? 0;
   if (voiceScore > 40) {
-    details.push({ category: "Voix générique", issue: "Formulations passe-partout caractéristiques de l'IA", severity: "high", examples: genericFound.slice(0, 6) });
+    const voiceFound: string[] = JSON.parse((voiceResult?.data?.foundJson as string) ?? "[]");
+    details.push({ category: "Voix générique", issue: "Formulations passe-partout caractéristiques de l'IA", severity: "high", examples: voiceFound.slice(0, 6) });
   }
 
   // 6. Perplexité approximée (prévisibilité)

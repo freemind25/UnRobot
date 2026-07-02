@@ -22,6 +22,7 @@ import { compressionRatioModule } from "./modCompressionRatio";
 import { zipfModule } from "./modZipf";
 import { passiveVoiceModule } from "./modPassiveVoice";
 import { perfectionModule } from "./modPerfection";
+import { voiceModule } from "./modVoice";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -39,6 +40,7 @@ export const analysisModules: AnalysisModule[] = [
   zipfModule,
   passiveVoiceModule,
   perfectionModule,
+  voiceModule,
 ];
 
 /**

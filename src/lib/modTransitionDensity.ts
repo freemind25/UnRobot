@@ -9,10 +9,10 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { WEIGHTED_CONNECTORS } from "./connectors";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const transitionDensityModule: AnalysisModule = {
   id: "transition",

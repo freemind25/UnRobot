@@ -48,3 +48,8 @@ export function printHTML(html: string) {
 export function splitSentences(text: string): string[] {
   return text.split(/[.!?]+/).map((s) => s.trim()).filter(Boolean);
 }
+
+// ---------------------------------------------------------------------------
+// Score clamp — plafonne une valeur dans [0, 100] arrondie à l'entier.
+// ---------------------------------------------------------------------------
+export const clampScore = (n: number) => Math.max(0, Math.min(100, Math.round(n)));

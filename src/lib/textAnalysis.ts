@@ -10,6 +10,7 @@
  */
 
 import { splitSentences } from "./utils";
+import { clampScore as clamp } from "./utils";
 import { detectHumanization, type HumanizationDetectionResult, type TextClassification } from "./humanizationDetector";
 import { runModule, type AnalysisContext } from "./analysisRegistry";
 import { AI_PATTERNS, type PatternDef } from "./patterns";
@@ -86,7 +87,6 @@ export const MIN_ANALYSIS_LENGTH = knowledge.global().minAnalysisLength;
 
 // ── Helpers ───────────────────────────────────────────────────────────
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 /**
  * Évalue les règles de détails LIC pour une métrique donnée.

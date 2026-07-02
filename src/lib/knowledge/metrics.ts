@@ -151,6 +151,15 @@ export const METRIC_CONFIGS: Record<string, MetricConfig> = {
       cvWarning: 0.25,
       cvNormal: 0.40,
     },
+    params: {
+      criticalScore: 90,
+      warningBase: 50,
+      warningRange: 30,
+      normalBase: 20,
+      normalRange: 20,
+      naturalBase: 15,
+      naturalSlope: 20,
+    },
   },
 
   entropy: {

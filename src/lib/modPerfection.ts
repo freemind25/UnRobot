@@ -8,9 +8,9 @@
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { clampScore as clamp } from "./utils";
 import { knowledge } from "./knowledge/registry";
 
-const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 const INFORMAL_FR = /\b(bah|ben|du coup|genre|truc|ouais|franchement|carrément)\b/gi;
 const ELLIPSIS_RE = /\.\.\.|…/g;

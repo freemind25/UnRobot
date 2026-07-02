@@ -913,37 +913,6 @@ function detectSemanticRepetition(sentences: string[]): { ratio: number; pairs: 
   return { ratio: sentences.length > 1 ? suspiciousPairs / (sentences.length - 1) : 0, pairs: suspiciousPairs };
 }
 
-// ── MODULE 7 : Score de personnalisation ────────────────────────────
-
-/**
- * Mesure la présence de marques de personnalisation :
- * exemples précis, contexte, expérience, références concrètes.
- */
-function computePersonalizationScore(text: string, sentences: string[]): number {
-  const markers = [
-    // Références concrètes (noms propres, lieux, organisations)
-    /(?<=\s)[A-ZÀ-Ý][a-zà-ÿ]{2,}/g,
-    // Chiffres et pourcentages
-    /\d+(?:\s*%|\s*(?:euros|dollars|€|\$|ans|mois|jours|heures|personnes|étudiants|employés|utilisateurs))/gi,
-    // Marques d'expérience personnelle
-    /\b(nous avons|j'ai|notre (équipe|équipe|étude|analyse|laboratoire|expérience|recherche)|dans (notre|mon|ma) (cas|étude|analyse|expérience|travail))\b/gi,
-    // Exemples introduits par « par exemple », « comme »
-    /\b(par exemple|tel que|notamment|parmi (lesquel|lesquell)les?|comme (le|la|l'|les))\b/gi,
-    // Citations ou références
-    /(?:selon|d'après|comme le (dit|montre|souligne))\s+[\wÀ-Ý]/gi,
-  ];
-
-  let totalHits = 0;
-  for (const marker of markers) {
-    totalHits += (text.match(marker) || []).length;
-  }
-
-  // Ratio : hits par phrase. Plus c'est élevé, plus c'est personnalisé.
-  const density = sentences.length > 0 ? totalHits / sentences.length : 0;
-  // Score inversé : peu de personnalisation = score IA élevé
-  return clamp(100 - density * 25);
-}
-
 // ── MODULE 8 : Score de paraphrase IA ───────────────────────────────
 
 /**
@@ -1147,8 +1116,9 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Répétition sémantique", issue: `${semRepetitionPairs} paire(s) de phrases consécutives avec contenu trop similaire (REPETITION_AI_PATTERN)`, severity: semRepetitionPairs > 2 ? "high" : "medium" });
   }
 
-  // Module 7 : Personnalisation (PERSONALIZATION_SCORE)
-  const personalizationScore = computePersonalizationScore(text, sentences);
+  // Module 7 : Personnalisation — via module Personalization
+  const personalizationResult = runModule("personalization", text, ctx);
+  const personalizationScore = personalizationResult?.score ?? 0;
   if (personalizationScore > 80) {
     details.push({ category: "Personnalisation", issue: "Absence de marques de personnalisation : pas d'exemples précis, de contexte, ni de références concrètes", severity: "high" });
   } else if (personalizationScore > 60) {

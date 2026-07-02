@@ -26,6 +26,7 @@ import { voiceModule } from "./modVoice";
 import { perplexityModule } from "./modPerplexity";
 import { depthModule } from "./modDepth";
 import { structureModule } from "./modStructure";
+import { personalizationModule } from "./modPersonalization";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -47,6 +48,7 @@ export const analysisModules: AnalysisModule[] = [
   perplexityModule,
   depthModule,
   structureModule,
+  personalizationModule,
 ];
 
 /**

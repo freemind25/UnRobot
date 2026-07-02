@@ -16,6 +16,7 @@ import { sentenceVariationModule } from "./modSentenceVariation";
 import { lexicalRichnessModule } from "./modLexicalRichness";
 import { repetitionModule } from "./modRepetition";
 import { paragraphBalanceModule } from "./modParagraphBalance";
+import { transitionDensityModule } from "./modTransitionDensity";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -27,7 +28,7 @@ export const analysisModules: AnalysisModule[] = [
   lexicalRichnessModule,
   repetitionModule,
   paragraphBalanceModule,
-  // PR6: TransitionDensity (transition)
+  transitionDensityModule,
 ];
 
 /**

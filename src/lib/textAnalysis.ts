@@ -1125,21 +1125,12 @@ export function analyzeText(text: string): AIAnalysisResult {
     details.push({ category: "Vocabulaire", issue: "Diversité lexicale faible, vocabulaire répétitif", severity: "medium" });
   }
 
-  // 3. Transitions mécaniques — Module 4 : connecteurs pondérés (WEIGHTED_CONNECTORS)
-  let transCount = 0;
-  let transWeightedCount = 0;
-  const transFound: string[] = [];
-  WEIGHTED_CONNECTORS.forEach(({ connector, weight }) => {
-    const m = text.match(new RegExp(connector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi")) || [];
-    if (m.length) {
-      transFound.push(connector);
-      transCount += m.length;
-      transWeightedCount += m.length * weight;
-    }
-  });
-  const connectorDensity = sentences.length > 0 ? transWeightedCount / sentences.length : 0;
-  const transitionScore = clamp(connectorDensity * 150);
+  // 3. Transitions mécaniques — via module TransitionDensity
+  const transResult = runModule("transition", text, ctx);
+  const transitionScore = transResult?.score ?? 0;
+  const transCount = (transResult?.data?.transCount as number) ?? 0;
   if (transitionScore > 45) {
+    const transFound: string[] = JSON.parse((transResult?.data?.transFoundJson as string) ?? "[]");
     details.push({ category: "Transitions", issue: "Connecteurs logiques trop fréquents", severity: "medium", examples: transFound.slice(0, 6) });
   }
 

@@ -6,12 +6,13 @@
  * 2. L'importer ici
  * 3. L'inscrire dans le tableau analysisModules
  *
- * Sprint 2A — PR1 : registre vide, sera peuplé par les PR suivantes.
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
 
 export type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+
+import { sentenceVariationModule } from "./modSentenceVariation";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -19,8 +20,7 @@ export type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./An
  * mais il détermine l'ordre d'exécution.
  */
 export const analysisModules: AnalysisModule[] = [
-  // Les modules seront ajoutés par :
-  // PR2: SentenceVariation (burstiness)
+  sentenceVariationModule,
   // PR3: LexicalRichness (vocabulary)
   // PR4: Repetition (semanticRepetition)
   // PR5: ParagraphBalance (paragraphBalance)

@@ -4,6 +4,7 @@
  */
 import { splitSentences } from "./utils";
 import { detectHumanization, type HumanizationDetectionResult, type TextClassification } from "./humanizationDetector";
+import { runModule, type AnalysisContext } from "./analysisRegistry";
 
 export interface StyleFingerprint {
   sentenceLength: number;
@@ -1097,18 +1098,24 @@ export function analyzeText(text: string): AIAnalysisResult {
   // Inclut les majuscules accentuées (À, É, È, Ô, etc.)
   const words = text.toLowerCase().match(/\b[\wàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+\b/gi) || [];
 
-  // 1. Burstiness (variation de longueur des phrases)
+  // Construction du contexte partagé pour les modules
   const sentenceLengths = sentences.map((s) => s.trim().split(/\s+/).length);
-  const avgLength = sentenceLengths.reduce((a, b) => a + b, 0) / Math.max(1, sentenceLengths.length);
-  const variance = sentenceLengths.reduce((a, b) => a + Math.pow(b - avgLength, 2), 0) / Math.max(1, sentenceLengths.length);
-  const stdDev = Math.sqrt(variance);
-  const burstinessScore = clamp((1 - stdDev / Math.max(1, avgLength)) * 100);
+  const wordFreq = new Map<string, number>();
+  for (const w of words) wordFreq.set(w, (wordFreq.get(w) || 0) + 1);
+  const uniqueWords = new Set(words);
+  const ctx: AnalysisContext = {
+    sentences, words, sentenceLengths, wordFreq, uniqueWords, textLength: text.length,
+  };
+
+  // 1. Burstiness — via module SentenceVariation
+  const burstinessResult = runModule("burstiness", text, ctx);
+  const burstinessScore = burstinessResult?.score ?? 0;
+  const avgLength = (burstinessResult?.data?.avgLength as number) ?? 0;
   if (burstinessScore > 70) {
     details.push({ category: "Burstiness", issue: "Longueur de phrases trop uniforme (typique de l'IA)", severity: "high" });
   }
 
   // 2. Diversité lexicale (TTR)
-  const uniqueWords = new Set(words);
   const ttr = (uniqueWords.size / Math.max(1, words.length)) * 100;
   const vocabularyScore = clamp(100 - ttr);
   if (ttr < 40) {

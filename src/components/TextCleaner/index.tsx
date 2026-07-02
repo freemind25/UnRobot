@@ -17,6 +17,7 @@ import { ModeSelector } from "./ModeSelector";
 import { WriterProfilePanel } from "./WriterProfilePanel";
 import { PlagiarismPanel } from "./PlagiarismPanel";
 import { TransferLearningPanel } from "./TransferLearningPanel";
+import { ReadabilityLab } from "./ReadabilityLab";
 import { EXAMPLE_TEXTS } from "@/data/exampleTexts";
 import { Button } from "@/components/ui/button";
 import { FileText, FileJson, FileDown, ShieldCheck, Brain } from "lucide-react";
@@ -225,6 +226,8 @@ export const TextCleaner: React.FC = () => {
       )}
 
       <AIAnalysis result={analysis} isAnalyzing={isAnalyzing} hybrid={hybrid} modelState={modelState} modelInfo={modelInfo} isMLInitializing={isMLInitializing} />
+
+      {hasText && <ReadabilityLab text={text} />}
 
       {showTransferLearning && (
         <TransferLearningPanel

@@ -27,6 +27,7 @@ import { perplexityModule } from "./modPerplexity";
 import { depthModule } from "./modDepth";
 import { structureModule } from "./modStructure";
 import { personalizationModule } from "./modPersonalization";
+import { paraphraseModule } from "./modParaphrase";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -49,6 +50,7 @@ export const analysisModules: AnalysisModule[] = [
   depthModule,
   structureModule,
   personalizationModule,
+  paraphraseModule,
 ];
 
 /**

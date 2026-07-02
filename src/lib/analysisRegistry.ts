@@ -19,6 +19,7 @@ import { paragraphBalanceModule } from "./modParagraphBalance";
 import { transitionDensityModule } from "./modTransitionDensity";
 import { entropyModule } from "./modEntropy";
 import { compressionRatioModule } from "./modCompressionRatio";
+import { zipfModule } from "./modZipf";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -33,6 +34,7 @@ export const analysisModules: AnalysisModule[] = [
   transitionDensityModule,
   entropyModule,
   compressionRatioModule,
+  zipfModule,
 ];
 
 /**

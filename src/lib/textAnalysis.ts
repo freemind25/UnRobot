@@ -29,6 +29,7 @@ export interface AIAnalysisResult {
   personalizationScore: number;
   paraphraseScore: number;
   styleScore: number;
+  paragraphBalanceScore: number;
   humanizationScore: number;
   sucksScore: number;
   patternCount: number;
@@ -1081,6 +1082,7 @@ export function analyzeText(text: string): AIAnalysisResult {
       personalizationScore: 0,
       paraphraseScore: 0,
       styleScore: 0,
+      paragraphBalanceScore: 0,
       humanizationScore: 100,
       sucksScore: 0,
       patternCount: 0,
@@ -1225,6 +1227,13 @@ export function analyzeText(text: string): AIAnalysisResult {
   const transDensity = words.length > 0 ? transCount / words.length : 0;
   const styleFingerprint = computeStyleFingerprint(text, sentences, words, transDensity);
 
+  // ParagraphBalance — via module (NOUVEAU score, ne participe pas au score composite)
+  const paraBalResult = runModule("paragraphBalance", text, ctx);
+  const paragraphBalanceScore = paraBalResult?.score ?? 0;
+  if (paragraphBalanceScore > 60) {
+    details.push({ category: "Équilibre paragraphes", issue: "Paragraphes de taille trop uniforme (symétrie suspecte)", severity: paragraphBalanceScore > 80 ? "high" : "medium" });
+  }
+
   // Style score : compare le fingerprint à un profil LLM typique
   // LLM : sentenceLength ~20, vocabularyDensity ~0.5-0.6, connectorRate élevé, repetitionRate faible, personalMarkers ~0
   const styleScore = clamp(
@@ -1326,6 +1335,7 @@ export function analyzeText(text: string): AIAnalysisResult {
     personalizationScore,
     paraphraseScore,
     styleScore,
+    paragraphBalanceScore,
     humanizationScore,
     sucksScore,
     patternCount,

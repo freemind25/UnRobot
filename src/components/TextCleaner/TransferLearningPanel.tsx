@@ -29,6 +29,8 @@ const BUILTIN_DATASETS = [
   { file: "UnRobot_Dataset_V10_Domain_Experts_300.json", label: "V10 — Experts métier", desc: "300 samples (150/150)", ai: 150, human: 150 },
   { file: "UnRobot_Dataset_V11_Robustness_Test_200.json", label: "V11 — Test de robustesse", desc: "200 samples (100/100)", ai: 100, human: 100 },
   { file: "UnRobot_Dataset_V12_Final_Calibration_200.json", label: "V12 — Calibration finale", desc: "200 samples (100/100)", ai: 100, human: 100 },
+  { file: "UnRobot_V13_Enriched_Dataset_100_Samples.json", label: "V13 — Enrichi 4 classes", desc: "100 samples (4 classes × 25)", ai: 25, human: 25 },
+  { file: "UnRobot_V14_Professional_Enriched_Dataset_500.json", label: "V14 — Pro enrichi 4 classes", desc: "500 samples (4 classes × 125)", ai: 125, human: 125 },
 ] as const;
 
 export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ onModelLoaded, activeModel }) => {
@@ -129,7 +131,7 @@ export const TransferLearningPanel: React.FC<TransferLearningPanelProps> = ({ on
       if (!res.ok) throw new Error("Fichier introuvable");
       const data: LabeledText[] = await res.json();
       if (!Array.isArray(data)) throw new Error("Format invalide");
-      setSamples((prev) => [...prev, ...data.filter((d) => d.text && (d.label === "ai" || d.label === "human"))]);
+      setSamples((prev) => [...prev, ...data.filter((d) => d.text && (d.label === "ai" || d.label === "human" || d.label === "ai_humanized" || d.label === "ai_paraphrased"))]);
       toast.success(`« ${ds.label} » chargé : ${data.length} échantillons ajoutés`);
     } catch {
       toast.error(`Impossible de charger « ${ds.label} »`);

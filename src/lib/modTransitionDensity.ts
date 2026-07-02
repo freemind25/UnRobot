@@ -5,22 +5,23 @@
  * L'IA surutilise les connecteurs ("en outre", "par conséquent", etc.)
  * pour donner une fausse cohésion.
  *
- * Extrait de textAnalysis.ts lignes 1128-1144.
- * Produit un résultat identique au transitionScore original.
+ * Sprint 5 : weight + multiplier → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
-import { WEIGHTED_CONNECTORS } from "./textAnalysis";
+import { WEIGHTED_CONNECTORS } from "./connectors";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const transitionDensityModule: AnalysisModule = {
   id: "transition",
   label: "Transitions mécaniques",
-  weight: 0.10,
+  weight: knowledge.weight("transition"),
 
   execute(text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { sentences } = ctx;
+    const multiplier = knowledge.multiplier("transition");
     let transCount = 0;
     let transWeightedCount = 0;
     const transFound: string[] = [];
@@ -36,11 +37,11 @@ export const transitionDensityModule: AnalysisModule = {
     });
 
     const connectorDensity = sentences.length > 0 ? transWeightedCount / sentences.length : 0;
-    const score = clamp(connectorDensity * 150);
+    const score = clamp(connectorDensity * multiplier);
 
     return {
       score,
-      data: { transCount, connectorDensity: Math.round(connectorDensity * 1000) / 1000, transFoundJson: JSON.stringify(transFound.slice(0, 6)) },
+      data: { transCount, connectorDensity: Math.round(connectorDensity * 1000) / 1000, transFoundJson: JSON.stringify(transFound.slice(0, knowledge.global().maxExamples)) },
     };
   },
 };

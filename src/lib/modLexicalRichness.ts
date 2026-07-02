@@ -5,18 +5,18 @@
  * Un TTR faible = beaucoup de répétitions = signal IA.
  * Un TTR élevé = vocabulaire riche = signal humain.
  *
- * Extrait de textAnalysis.ts lignes 1118-1123.
- * Produit un résultat identique au vocabularyScore original.
+ * Sprint 5 : weight → LIC
  */
 
 import type { AnalysisModule, AnalysisContext, AnalysisModuleResult } from "./AnalysisModule";
+import { knowledge } from "./knowledge/registry";
 
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
 
 export const lexicalRichnessModule: AnalysisModule = {
   id: "vocabulary",
   label: "Diversité lexicale",
-  weight: 0.10,
+  weight: knowledge.weight("vocabulary"),
 
   execute(_text: string, ctx: AnalysisContext): AnalysisModuleResult {
     const { words, uniqueWords } = ctx;

@@ -5,6 +5,8 @@
  * par un outil de réécriture (QuillBot, Undetectable.AI, etc.).
  *
  * 12 scores avancés (modules 39-50 AWPA) + classification 4 classes.
+ *
+ * Sprint 6 PR2 : tous les seuils/poids/listes externalisés vers le LIC.
  */
 import { splitSentences } from "./utils";
 import { knowledge } from "./knowledge/registry";
@@ -62,31 +64,28 @@ function stdDev(arr: number[]): number {
   return Math.sqrt(variance(arr));
 }
 
-/* ── Signatures de connecteurs et phrases humanisées ──────── */
+/** Compte les occurrences d'une liste de mots dans un texte. */
+function countListMatches(text: string, list: string[], wordBoundary = true): number {
+  let count = 0;
+  for (const item of list) {
+    const escaped = item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = wordBoundary ? `\\b${escaped}\\b` : escaped;
+    const matches = text.match(new RegExp(pattern, "gi"));
+    if (matches) count += matches.length;
+  }
+  return count;
+}
 
-/** Connecteurs typiquement injectés par les humanizers pour "casser" le style IA. */
-const HUMANIZER_CONNECTORS = [
-  "du coup", "du reste", "au fond", "en gros", "bref", "en fait",
-  "bon", "alors là", "tout ça", "quand même", "enfin bref",
-  "pour tout dire", "à vrai dire", "soit dit en passant",
-];
-
-/** Phrases typiques des humanizers qui remplacent les formules IA par des tournures "naturelles". */
-const HUMANIZER_PHRASES = [
-  "il faut savoir que", "ce qu'il faut comprendre", "la chose c'est que",
-  "ce qui est intéressant", "ce qui est clair", "le truc c'est que",
-  "je pense que", "on voit bien que", "ce qui frappe",
-  "si on y regarde de plus près", "pour être tout à fait honnête",
-];
-
-/** Signaux de paraphrase IA : synonymes forcés, reformulations visibles. */
-const PARAPHRASE_SIGNALS = [
-  /\b(mettre en avant|mettre en évidence|mettre en lumière)\b.*\b(souligner|faire ressortir)\b/gi,
-  /\b(important|essentiel|crucial)\b.*\b(à noter|de souligner|de retenir)\b/gi,
-  /\b(permets? de|permet de|favorise|facilite)\b.*\b(accomplir|réaliser|atteindre)\b/gi,
-  /\b(divers|différents|multiples)\b.*\b(aspects|points|éléments)\b/gi,
-  /\b(en matière de|sur le plan de|dans le domaine de)\b/gi,
-];
+/** Compare une valeur avec un opérateur (pour la classification). */
+function cmp(val: number, op: string, target: number): boolean {
+  switch (op) {
+    case ">": return val > target;
+    case "<": return val < target;
+    case ">=": return val >= target;
+    case "<=": return val <= target;
+    default: return false;
+  }
+}
 
 /* ── Fonctions de scoring individuelles ────────────────────── */
 
@@ -96,19 +95,17 @@ const PARAPHRASE_SIGNALS = [
  * anormalement uniforme (trop variée pour être naturelle).
  */
 function computeSyntacticVariation(sentences: string[]): number {
-  if (sentences.length < 3) return 0;
+  const cfg = knowledge.humanScore("syntacticVariation");
+  if (sentences.length < cfg.minItems) return 0;
 
-  // Compter les types de structures syntaxiques par phrase
   const passiveCount = sentences.filter(s => /\b(être|été|est|sont|était|étaient)\s+\w+(é|ée|és|ées)/i.test(s)).length;
   const interrogativeCount = sentences.filter(s => /^\s*[a-zàâäéèêëîïôöùûüç]'|\?|est-ce que/i.test(s)).length;
   const imperativeCount = sentences.filter(s => /^\s*[a-zàâäéèêëîïôöùûüç]+(?:z|ons|ez)\b/i.test(s)).length;
   const infinitiveStart = sentences.filter(s => /^\s*(?:pour|avant|après|de|sans)\s+\w+(?:er|ir|re|oir)\b/i.test(s)).length;
 
-  const structureTypes = [passiveCount, interrogativeCount, imperativeCount, infinitiveStart];
-  const activeCount = sentences.length - passiveCount - interrogativeCount - imperativeCount;
-  structureTypes.push(activeCount);
+  const structureTypes = [passiveCount, interrogativeCount, imperativeCount, infinitiveStart,
+    sentences.length - passiveCount - interrogativeCount - imperativeCount];
 
-  // Entropie des types de structures
   const total = sentences.length;
   let entropy = 0;
   for (const count of structureTypes) {
@@ -116,12 +113,10 @@ function computeSyntacticVariation(sentences: string[]): number {
     const p = count / total;
     entropy -= p * Math.log2(p);
   }
-  const maxEntropy = Math.log2(6); // 6 types possibles
+  const maxEntropy = Math.log2(structureTypes.length);
   const normalizedEntropy = maxEntropy > 0 ? entropy / maxEntropy : 0;
 
-  // Si toutes les structures sont représentées de manière trop équitable = suspect
-  // Un humain a des biais de syntaxe naturels
-  return clamp((normalizedEntropy - 0.5) * 200);
+  return clamp((normalizedEntropy - cfg.thresholds.entropyBaseline) * cfg.params.multiplier);
 }
 
 /**
@@ -129,28 +124,22 @@ function computeSyntacticVariation(sentences: string[]): number {
  * Les humanizers injectent des synonymes, ce qui monte artificiellement le TTR.
  */
 function computeLexicalDiversity(words: string[], uniqueWords: Set<string>): number {
-  if (words.length < 20) return 0;
+  const cfg = knowledge.humanScore("lexicalDiversity");
+  if (words.length < cfg.minItems) return 0;
 
   const ttr = uniqueWords.size / words.length;
 
-  // Un TTR très élevé (> 0.8) sur un texte court est suspect
-  // Les textes humains naturels ont généralement 0.5-0.75
-  if (ttr > 0.8) return clamp((ttr - 0.8) * 500);
-  if (ttr > 0.75) return clamp((ttr - 0.75) * 200);
+  if (ttr > cfg.thresholds.ttrHigh) return clamp((ttr - cfg.thresholds.ttrHigh) * cfg.params.ttrHighMult);
+  if (ttr > cfg.thresholds.ttrMid) return clamp((ttr - cfg.thresholds.ttrMid) * cfg.params.ttrMidMult);
 
-  // Vérifier la distribution de fréquence : un humanizer crée une distribution trop plate
   const freqMap = new Map<string, number>();
-  for (const w of words) {
-    freqMap.set(w, (freqMap.get(w) || 0) + 1);
-  }
+  for (const w of words) freqMap.set(w, (freqMap.get(w) || 0) + 1);
   const freqValues = Array.from(freqMap.values());
   const freqVariance = variance(freqValues);
   const avgFreq = words.length / Math.max(1, uniqueWords.size);
 
-  // Variance basse = distribution trop plate = synonymes artificiels
   const flatnessScore = Math.max(0, 1 - freqVariance / Math.max(0.01, avgFreq));
-
-  return clamp(flatnessScore * 60);
+  return clamp(flatnessScore * cfg.params.flatnessMult);
 }
 
 /**
@@ -158,33 +147,29 @@ function computeLexicalDiversity(words: string[], uniqueWords: Set<string>): num
  * Un humanizer crée une alternance courte/longue trop régulière.
  */
 function computeSentenceRhythm(sentences: string[]): number {
-  if (sentences.length < 4) return 0;
+  const cfg = knowledge.humanScore("sentenceRhythm");
+  if (sentences.length < cfg.minItems) return 0;
 
   const lengths = sentences.map(s => s.trim().split(/\s+/).length);
   const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
-  const sd = stdDev(lengths);
-  const cv = avg > 0 ? sd / avg : 0; // Coefficient de variation
+  const cv = avg > 0 ? stdDev(lengths) / avg : 0;
 
-  // CV entre 0.3 et 0.5 = zone normale humaine
-  // CV trop régulier (0.4-0.5 exactement) ou pattern alternance parfaite = suspect
-  if (cv < 0.15) return clamp(80); // Trop uniforme (non humanisé, IA brute)
-  if (cv > 0.7) return 0; // Très naturel
+  if (cv < cfg.thresholds.cvTooUniform) return clamp(cfg.params.tooUniformScore);
+  if (cv > cfg.thresholds.cvNatural) return 0;
 
-  // Détecter un pattern d'alternance courte/longue/courte/longue
   let alternations = 0;
   for (let i = 1; i < lengths.length; i++) {
     const diff = lengths[i] - lengths[i - 1];
     if (i >= 2) {
       const prevDiff = lengths[i - 1] - lengths[i - 2];
-      if (Math.sign(diff) !== Math.sign(prevDiff) && Math.abs(diff) > 3) {
+      if (Math.sign(diff) !== Math.sign(prevDiff) && Math.abs(diff) > cfg.thresholds.minDiffForAlternation) {
         alternations++;
       }
     }
   }
   const alternationRatio = alternations / Math.max(1, lengths.length - 2);
 
-  // Trop d'alternances régulières = humanizer
-  if (alternationRatio > 0.7) return clamp(alternationRatio * 80);
+  if (alternationRatio > cfg.thresholds.alternationThreshold) return clamp(alternationRatio * cfg.params.alternationMult);
   return 0;
 }
 
@@ -193,15 +178,15 @@ function computeSentenceRhythm(sentences: string[]): number {
  * Un humanizer peut égaliser les tailles de paragraphes.
  */
 function computeParagraphVariance(text: string): number {
+  const cfg = knowledge.humanScore("paragraphVariance");
   const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-  if (paragraphs.length < 2) return 0;
+  if (paragraphs.length < cfg.minItems) return 0;
 
   const paraLengths = paragraphs.map(p => p.trim().split(/\s+/).length);
   const paraCV = stdDev(paraLengths) / Math.max(1, paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length);
 
-  // CV très faible = paragraphes trop égaux = suspect
-  if (paraCV < 0.15) return clamp(90 - paraCV * 500);
-  if (paraCV < 0.25) return clamp(50 - paraCV * 150);
+  if (paraCV < cfg.thresholds.cvCritical) return clamp(cfg.params.criticalBase - paraCV * cfg.params.criticalMult);
+  if (paraCV < cfg.thresholds.cvWarning) return clamp(cfg.params.warningBase - paraCV * cfg.params.warningMult);
   return 0;
 }
 
@@ -210,45 +195,25 @@ function computeParagraphVariance(text: string): number {
  * Même après humanisation, certaines phrases IA subsistent.
  */
 function computeAiPhraseDensity(text: string, sentences: string[]): number {
-  const aiPhrases = [
-    "il est important de", "il convient de", "en conclusion", "pour conclure",
-    "force est de constater", "il est essentiel", "in today's world",
-    "it is important to", "plays a crucial role", "a testament to",
-    "delve into", "à l'ère du", "dans le monde de", "enjeux majeurs",
-    "cette approche permet", "solution innovante", "en conclusion",
-    "une chose est certaine", "il est clair que",
-  ];
+  const cfg = knowledge.humanScore("aiPhraseDensity");
+  const lists = knowledge.humanization().lists;
 
-  let count = 0;
-  for (const phrase of aiPhrases) {
-    const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const matches = text.match(new RegExp(escaped, "gi"));
-    if (matches) count += matches.length;
-  }
-
-  return clamp((count / Math.max(1, sentences.length)) * 250);
+  const count = countListMatches(text, lists.aiPhrases, false);
+  return clamp((count / Math.max(1, sentences.length)) * cfg.params.densityMult);
 }
 
 /**
  * #44 — Surutilisation de connecteurs (compensation par le humanizer).
  */
 function computeConnectorOveruse(text: string, sentences: string[]): number {
-  const allConnectors = [
-    ...HUMANIZER_CONNECTORS,
-    "en effet", "cependant", "de plus", "par ailleurs", "en outre",
-    "par conséquent", "néanmoins", "toutefois", "enfin", "ensuite",
-    "d'une part", "d'autre part", "non seulement", "mais encore",
-  ];
+  const cfg = knowledge.humanScore("connectorOveruse");
+  const lists = knowledge.humanization().lists;
 
-  let count = 0;
-  for (const c of allConnectors) {
-    const escaped = c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const matches = text.match(new RegExp(`\\b${escaped}\\b`, "gi"));
-    if (matches) count += matches.length;
-  }
+  const allConnectors = [...lists.humanizerConnectors, ...lists.additionalConnectors];
+  const count = countListMatches(text, allConnectors);
 
   const density = count / Math.max(1, sentences.length);
-  return clamp(density * 120);
+  return clamp(density * cfg.params.densityMult);
 }
 
 /**
@@ -257,9 +222,9 @@ function computeConnectorOveruse(text: string, sentences: string[]): number {
  * Un texte humanisé conserve trop bien la cohérence sémantique.
  */
 function computeSemanticPreservation(sentences: string[]): number {
-  if (sentences.length < 3) return 50;
+  const cfg = knowledge.humanScore("semanticPreservation");
+  if (sentences.length < cfg.minItems) return cfg.params.defaultScore;
 
-  // Mesurer la similarité bigrammes entre phrases consécutives
   let totalSimilarity = 0;
   let pairs = 0;
 
@@ -270,29 +235,19 @@ function computeSemanticPreservation(sentences: string[]): number {
     const prevWords = sentences[i - 1].toLowerCase().split(/\s+/);
     const currWords = sentences[i].toLowerCase().split(/\s+/);
 
-    for (let j = 0; j < prevWords.length - 1; j++) {
-      prevBigrams.add(prevWords[j] + " " + prevWords[j + 1]);
-    }
-    for (let j = 0; j < currWords.length - 1; j++) {
-      currBigrams.add(currWords[j] + " " + currWords[j + 1]);
-    }
+    for (let j = 0; j < prevWords.length - 1; j++) prevBigrams.add(prevWords[j] + " " + prevWords[j + 1]);
+    for (let j = 0; j < currWords.length - 1; j++) currBigrams.add(currWords[j] + " " + currWords[j + 1]);
 
     if (prevBigrams.size === 0 || currBigrams.size === 0) continue;
 
     let overlap = 0;
-    for (const bg of currBigrams) {
-      if (prevBigrams.has(bg)) overlap++;
-    }
-    const similarity = overlap / Math.min(prevBigrams.size, currBigrams.size);
-    totalSimilarity += similarity;
+    for (const bg of currBigrams) if (prevBigrams.has(bg)) overlap++;
+    totalSimilarity += overlap / Math.min(prevBigrams.size, currBigrams.size);
     pairs++;
   }
 
   const avgSimilarity = pairs > 0 ? totalSimilarity / pairs : 0;
-
-  // Similarité très faible entre phrases = naturel (sauts logiques humains)
-  // Similarité élevée = IA ou humanizer qui maintient la cohérence
-  return clamp(100 - avgSimilarity * 300);
+  return clamp(100 - avgSimilarity * cfg.params.similarityMult);
 }
 
 /**
@@ -300,37 +255,19 @@ function computeSemanticPreservation(sentences: string[]): number {
  * Un humanizer injecte des changements de ton (formel → familier) trop visibles.
  */
 function computeToneVariation(text: string, sentences: string[]): number {
-  // Marqueurs formels
-  const formalMarkers = [
-    "en effet", "par conséquent", "il convient de", "ainsi que",
-    "notamment", "cependant", "en revanche", "par ailleurs",
-  ];
-  // Marqueurs informels (injectés par les humanizers)
-  const informalMarkers = [
-    "du coup", "en gros", "au fond", "bref", "bon", "alors là",
-    "franchement", "genre", "truc", "tout ça",
-  ];
+  const cfg = knowledge.humanScore("toneVariation");
+  const lists = knowledge.humanization().lists;
 
-  let formalCount = 0;
-  let informalCount = 0;
-
-  for (const m of formalMarkers) {
-    const escaped = m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    formalCount += (text.match(new RegExp(`\\b${escaped}\\b`, "gi")) || []).length;
-  }
-  for (const m of informalMarkers) {
-    const escaped = m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    informalCount += (text.match(new RegExp(`\\b${escaped}\\b`, "gi")) || []).length;
-  }
+  const formalCount = countListMatches(text, lists.formalMarkers);
+  const informalCount = countListMatches(text, lists.informalMarkers);
 
   const total = formalCount + informalCount;
   if (total === 0) return 0;
 
-  // Mélange formel/informel très équilibré = suspect (humanizer)
   const balance = 1 - Math.abs(formalCount - informalCount) / total;
   const mixDensity = total / Math.max(1, sentences.length);
 
-  return clamp(balance * mixDensity * 200);
+  return clamp(balance * mixDensity * cfg.params.mixMult);
 }
 
 /**
@@ -338,22 +275,22 @@ function computeToneVariation(text: string, sentences: string[]): number {
  * Un humanizer ajoute "je", "mon", "notre" de manière trop régulière.
  */
 function computePersonalMarkerArtificiality(text: string, sentences: string[]): number {
+  const cfg = knowledge.humanScore("personalMarkerArtificiality");
+  const t = cfg.thresholds;
+  const p = cfg.params;
+
   const firstPerson = (text.match(/\b(je|mon|ma|mes|nous|notre|nos|j')\b/gi) || []).length;
   const density = firstPerson / Math.max(1, sentences.length);
 
-  // Trop régulier : chaque phrase a exactement 1-2 marqueurs = suspect
   const perSentence = sentences.map(s =>
     (s.match(/\b(je|mon|ma|mes|nous|notre|nos|j')\b/gi) || []).length
   );
   const markerVariance = variance(perSentence);
 
-  // Variance très faible + densité notable = artificiel
-  if (density > 0.3 && markerVariance < 0.5) {
-    return clamp(40 + (1 - markerVariance) * 40);
-  }
-  if (density > 0.5 && markerVariance < 1.0) {
-    return clamp(30 + (1 - markerVariance) * 30);
-  }
+  if (density > t.densityHigh && markerVariance < t.varianceHigh)
+    return clamp(p.highBase + (1 - markerVariance) * p.highMult);
+  if (density > t.densityVeryHigh && markerVariance < t.varianceVeryHigh)
+    return clamp(p.veryHighBase + (1 - markerVariance) * p.veryHighMult);
 
   return 0;
 }
@@ -364,37 +301,27 @@ function computePersonalMarkerArtificiality(text: string, sentences: string[]): 
  * Humanizers : ces éléments sont absents ou mal imités.
  */
 function computeHumanNuance(text: string, sentences: string[]): number {
+  const cfg = knowledge.humanScore("humanNuance");
+  const lists = knowledge.humanization().lists;
+  const p = cfg.params;
   let nuanceScore = 0;
 
-  // Approximations (marqueurs d'incertitude naturelle)
-  const approximations = [
-    "environ", "à peu près", "grossièrement", "autour de",
-    "quelque chose comme", "plus ou moins", "je dirais",
-    "si je me souviens bien", "à ma connaissance", "sauf erreur",
-  ];
-  let approxCount = 0;
-  for (const a of approximations) {
-    const escaped = a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    approxCount += (text.match(new RegExp(`\\b${escaped}\\b`, "gi")) || []).length;
-  }
-  nuanceScore += Math.min(30, approxCount * 10);
+  const approxCount = countListMatches(text, lists.approximations);
+  nuanceScore += Math.min(p.approxMaxPoints, approxCount * p.approxPointsPerHit);
 
-  // Digressions (parenthèses, incises)
   const parentheticals = (text.match(/\([^)]{10,}\)/g) || []).length;
   const emDashes = (text.match(/—[^—]+—/g) || []).length;
-  nuanceScore += Math.min(20, (parentheticals + emDashes) * 10);
+  nuanceScore += Math.min(p.parentheticalMaxPoints, (parentheticals + emDashes) * p.parentheticalPointsPerHit);
 
-  // Auto-corrections ("ou plutôt", "enfin", "quoique")
   const corrections = (text.match(/\b(ou plutôt|enfin[^,]|quoique|du moins)\b/gi) || []).length;
-  nuanceScore += Math.min(20, corrections * 10);
+  nuanceScore += Math.min(p.correctionMaxPoints, corrections * p.correctionPointsPerHit);
 
-  // Empirisme ("en pratique", "d'après mon expérience", "de ce que j'ai vu")
   const empirical = (text.match(/\b(en pratique|d'après mon expérience|de ce que j'ai vu|concrètement)\b/gi) || []).length;
-  nuanceScore += Math.min(15, empirical * 7);
+  nuanceScore += Math.min(p.empiricalMaxPoints, empirical * p.empiricalPointsPerHit);
 
-  // Spécificités temporelles ("récemment", "l'an dernier", "en 2024")
-  const temporal = (text.match(/\b(récemment|l'an dernier|en \d{4}|cette année|le mois dernier)\b/gi) || []).length;
-  nuanceScore += Math.min(15, temporal * 7);
+  const temporalPattern = new RegExp(`\\b(${lists.temporalMarkers.join("|")})\\b`, "gi");
+  const temporal = (text.match(temporalPattern) || []).length;
+  nuanceScore += Math.min(p.temporalMaxPoints, temporal * p.temporalPointsPerHit);
 
   return clamp(nuanceScore);
 }
@@ -404,123 +331,62 @@ function computeHumanNuance(text: string, sentences: string[]): number {
  * Les humanizers réordonnent les phrases et aléatorisent les transitions.
  */
 function computeStructureRandomness(sentences: string[]): number {
-  if (sentences.length < 4) return 0;
+  const cfg = knowledge.humanScore("structureRandomness");
+  if (sentences.length < cfg.minItems) return 0;
 
-  // Détecter les changements brusques de sujet (absence de transition)
+  const lists = knowledge.humanization().lists;
+  const connectorWords = new Set(lists.structureConnectors);
+
   let topicShifts = 0;
   const topicWords = new Set<string>();
 
   for (const s of sentences) {
     const words = s.toLowerCase().match(/\b[\wàâäéèêëîïôöùûüç]{4,}\b/g) || [];
     if (words.length === 0) continue;
-    const topWord = words[0]; // Premier mot significatif
-    if (topicWords.has(topWord)) {
-      topicShifts++;
-    }
+    if (topicWords.has(words[0])) topicShifts++;
     for (const w of words.slice(0, 5)) topicWords.add(w);
   }
-
-  // Absence totale de connecteurs entre les phrases = réordonnancement
-  const connectorWords = new Set([
-    "mais", "donc", "or", "ni", "car", "puis", "en", "et", "ou",
-    "cependant", "cependant", "toutefois", "néanmoins", "enfin",
-    "ensuite", "premièrement", "deuxièmement", "par ailleurs",
-    "de plus", "en outre", "en effet", "ainsi",
-  ]);
 
   let missingTransitions = 0;
   for (let i = 1; i < sentences.length; i++) {
     const firstWord = sentences[i].trim().split(/\s+/)[0]?.toLowerCase() || "";
-    if (!connectorWords.has(firstWord) && firstWord.length > 2) {
-      missingTransitions++;
-    }
+    if (!connectorWords.has(firstWord) && firstWord.length > 2) missingTransitions++;
   }
 
   const missingRatio = missingTransitions / Math.max(1, sentences.length - 1);
   const shiftRatio = topicShifts / Math.max(1, sentences.length);
 
-  return clamp(missingRatio * 40 + shiftRatio * 30);
+  return clamp(missingRatio * cfg.params.missingTransitionWeight + shiftRatio * cfg.params.topicShiftWeight);
 }
 
 /**
  * #50 — Score global de probabilité d'humanisation.
  * Combine les signaux inverses pour estimer si un texte a été humanisé.
  */
-function computeHumanizationLikelihood(scores: Omit<HumanizationDetectionResult, "classification" | "classificationLabel" | "humanizationLikelihood">): number {
-  const {
-    syntacticVariationScore,
-    lexicalDiversityScore,
-    sentenceRhythmScore,
-    paragraphVarianceScore,
-    aiPhraseDensity,
-    connectorOveruseScore,
-    semanticPreservationScore,
-    toneVariationScore,
-    personalMarkerScore,
-    structureRandomnessScore,
-  } = scores;
+function computeHumanizationLikelihood(scores: Record<string, number>): number {
+  const lk = knowledge.humanization().likelihood;
+  const pw = lk.positiveWeights;
+  const nw = lk.negativeWeights;
+  const nuw = lk.nuanceWeights;
 
-  // Signaux positifs d'humanisation (plus élevés = plus probablement humanisé)
-  const positiveSignals = [
-    syntacticVariationScore * 0.10,
-    lexicalDiversityScore * 0.08,
-    sentenceRhythmScore * 0.12,
-    paragraphVarianceScore * 0.08,
-    toneVariationScore * 0.12,
-    personalMarkerScore * 0.10,
-    structureRandomnessScore * 0.10,
-  ];
+  const positiveSum = Object.entries(pw).reduce((s, [k, w]) => s + (scores[k] ?? 0) * w, 0);
+  const negativeSum = Object.entries(nw).reduce((s, [k, w]) => s + (scores[k] ?? 0) * w, 0);
+  const nuanceSum = Object.entries(nuw).reduce((s, [k, w]) => s + (100 - (scores[k] ?? 0)) * w, 0);
 
-  // Signaux négatifs (présence résiduelle d'IA)
-  const negativeSignals = [
-    aiPhraseDensity * 0.15,
-    connectorOveruseScore * 0.10,
-  ];
-
-  // Signaux mitigés
-  const nuanceSignals = [
-    (100 - semanticPreservationScore) * 0.05, // Moins de préservation = plus humain
-  ];
-
-  const positiveSum = positiveSignals.reduce((a, b) => a + b, 0);
-  const negativeSum = negativeSignals.reduce((a, b) => a + b, 0);
-  const nuanceSum = nuanceSignals.reduce((a, b) => a + b, 0);
-
-  return clamp(positiveSum - negativeSum * 0.6 + nuanceSum);
+  return clamp(positiveSum - negativeSum * lk.negativeDampening + nuanceSum);
 }
 
-/* ── Classification 4 classes ──────────────────────────────── */
+/* ── Classification 4 classes (data-driven) ──────────────────── */
 
-function classify(
-  aiScore: number,
-  humanizationProbability: number,
-  aiPhraseDensity: number,
-  sentenceRhythmScore: number,
-  toneVariationScore: number,
-): { classification: TextClassification; label: string } {
-  // AI brute : score IA élevé + probabilité d'humanisation faible
-  if (aiScore > 60 && humanizationProbability < 35) {
-    return { classification: "ai", label: "Texte compatible avec une génération IA brute" };
+function classify(scores: Record<string, number>): { classification: TextClassification; label: string } {
+  const rules = knowledge.humanization().classificationRules;
+
+  for (const rule of rules) {
+    if (!rule.conditions.every(c => cmp(scores[c.score] ?? 0, c.op, c.value))) continue;
+    if (rule.confirmConditions && !rule.confirmConditions.some(c => cmp(scores[c.score] ?? 0, c.op, c.value))) continue;
+    return { classification: rule.classification, label: rule.label };
   }
 
-  // AI humanisé : score IA modéré + signaux d'humanisation clairs
-  if (humanizationProbability > 50 && aiScore > 30 && aiScore < 75) {
-    if (toneVariationScore > 30 || sentenceRhythmScore > 20) {
-      return { classification: "ai_humanized", label: "Texte présentant des caractéristiques compatibles avec une humanisation IA" };
-    }
-  }
-
-  // AI paraphrasé : score IA élevé + densité de phrases IA résiduelles + signaux de reformulation
-  if (aiScore > 40 && aiPhraseDensity > 20 && humanizationProbability > 25) {
-    return { classification: "ai_paraphrased", label: "Texte présentant des caractéristiques compatibles avec une paraphrase IA" };
-  }
-
-  // Humanisé aussi si le score IA a été réduit artificiellement
-  if (aiScore < 40 && humanizationProbability > 60) {
-    return { classification: "ai_humanized", label: "Texte présentant des caractéristiques compatibles avec une transformation IA" };
-  }
-
-  // Humain par défaut
   return { classification: "human", label: "Caractéristiques d'écriture humaine" };
 }
 
@@ -534,7 +400,10 @@ export function detectHumanization(
   text: string,
   aiScore: number,
 ): HumanizationDetectionResult {
-  if (!text || text.length < 100) {
+  const h = knowledge.humanization();
+
+  if (!text || text.length < h.minTextLength) {
+    const semDefault = h.scores.semanticPreservation.params.defaultScore;
     return {
       humanizationProbability: 0,
       classification: "human",
@@ -542,7 +411,7 @@ export function detectHumanization(
       syntacticVariationScore: 0, lexicalDiversityScore: 0,
       sentenceRhythmScore: 0, paragraphVarianceScore: 0,
       aiPhraseDensity: 0, connectorOveruseScore: 0,
-      semanticPreservationScore: 50, toneVariationScore: 0,
+      semanticPreservationScore: semDefault, toneVariationScore: 0,
       personalMarkerScore: 0, humanNuanceScore: 0,
       structureRandomnessScore: 0, humanizationLikelihood: 0,
     };
@@ -552,38 +421,43 @@ export function detectHumanization(
   const words = text.toLowerCase().match(/\b[\wàâäéèêëîïôöùûüç]+\b/gi) || [];
   const uniqueWords = new Set(words);
 
-  // Calculer les 12 scores
-  const syntacticVariationScore = computeSyntacticVariation(sentences);
-  const lexicalDiversityScore = computeLexicalDiversity(words, uniqueWords);
-  const sentenceRhythmScore = computeSentenceRhythm(sentences);
-  const paragraphVarianceScore = computeParagraphVariance(text);
-  const aiPhraseDensity = computeAiPhraseDensity(text, sentences);
-  const connectorOveruseScore = computeConnectorOveruse(text, sentences);
-  const semanticPreservationScore = computeSemanticPreservation(sentences);
-  const toneVariationScore = computeToneVariation(text, sentences);
-  const personalMarkerScore = computePersonalMarkerArtificiality(text, sentences);
-  const humanNuanceScore = computeHumanNuance(text, sentences);
-  const structureRandomnessScore = computeStructureRandomness(sentences);
-
-  // Scores intermédiaires pour la classification
-  const intermediateScores = {
-    syntacticVariationScore, lexicalDiversityScore, sentenceRhythmScore,
-    paragraphVarianceScore, aiPhraseDensity, connectorOveruseScore,
-    semanticPreservationScore, toneVariationScore, personalMarkerScore,
-    humanNuanceScore, structureRandomnessScore,
+  const scores: Record<string, number> = {
+    syntacticVariationScore: computeSyntacticVariation(sentences),
+    lexicalDiversityScore: computeLexicalDiversity(words, uniqueWords),
+    sentenceRhythmScore: computeSentenceRhythm(sentences),
+    paragraphVarianceScore: computeParagraphVariance(text),
+    aiPhraseDensity: computeAiPhraseDensity(text, sentences),
+    connectorOveruseScore: computeConnectorOveruse(text, sentences),
+    semanticPreservationScore: computeSemanticPreservation(sentences),
+    toneVariationScore: computeToneVariation(text, sentences),
+    personalMarkerScore: computePersonalMarkerArtificiality(text, sentences),
+    humanNuanceScore: computeHumanNuance(text, sentences),
+    structureRandomnessScore: computeStructureRandomness(sentences),
   };
 
-  const humanizationLikelihood = computeHumanizationLikelihood(intermediateScores);
+  const humanizationLikelihood = computeHumanizationLikelihood(scores);
 
-  const { classification, label: classificationLabel } = classify(
-    aiScore, humanizationLikelihood, aiPhraseDensity, sentenceRhythmScore, toneVariationScore,
-  );
+  const { classification, label: classificationLabel } = classify({
+    ...scores,
+    aiScore,
+    humanizationProbability: humanizationLikelihood,
+  });
 
   return {
     humanizationProbability: humanizationLikelihood,
     classification,
     classificationLabel,
-    ...intermediateScores,
+    syntacticVariationScore: scores.syntacticVariationScore,
+    lexicalDiversityScore: scores.lexicalDiversityScore,
+    sentenceRhythmScore: scores.sentenceRhythmScore,
+    paragraphVarianceScore: scores.paragraphVarianceScore,
+    aiPhraseDensity: scores.aiPhraseDensity,
+    connectorOveruseScore: scores.connectorOveruseScore,
+    semanticPreservationScore: scores.semanticPreservationScore,
+    toneVariationScore: scores.toneVariationScore,
+    personalMarkerScore: scores.personalMarkerScore,
+    humanNuanceScore: scores.humanNuanceScore,
+    structureRandomnessScore: scores.structureRandomnessScore,
     humanizationLikelihood,
   };
 }

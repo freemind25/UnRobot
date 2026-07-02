@@ -24,6 +24,7 @@ import { passiveVoiceModule } from "./modPassiveVoice";
 import { perfectionModule } from "./modPerfection";
 import { voiceModule } from "./modVoice";
 import { perplexityModule } from "./modPerplexity";
+import { depthModule } from "./modDepth";
 
 /**
  * Registre ordonné des modules d'analyse.
@@ -43,6 +44,7 @@ export const analysisModules: AnalysisModule[] = [
   perfectionModule,
   voiceModule,
   perplexityModule,
+  depthModule,
 ];
 
 /**
